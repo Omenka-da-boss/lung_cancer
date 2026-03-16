@@ -1,0 +1,22 @@
+artifact_path: file:\C:\Users\DELL\Desktop\Data Science\mlops\mlruns/728723521009513254/models/m-060b838b56624a0ca8f46cd6ddf5446f/artifacts
+flavors:
+  python_function:
+    data: model.ubj
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.xgboost
+    python_version: 3.12.6
+  xgboost:
+    code: null
+    data: model.ubj
+    model_class: xgboost.sklearn.XGBClassifier
+    model_format: ubj
+    xgb_version: 3.1.2
+mlflow_version: 3.8.1
+model_id: m-060b838b56624a0ca8f46cd6ddf5446f
+model_size_bytes: 1239529
+model_uuid: m-060b838b56624a0ca8f46cd6ddf5446f
+prompts: null
+run_id: feb9063b465c43288c98d78870471cd5
+utc_time_created: '2026-02-18 06:13:22.885497'

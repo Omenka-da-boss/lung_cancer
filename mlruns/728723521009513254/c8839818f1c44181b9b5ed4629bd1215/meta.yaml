@@ -1,0 +1,14 @@
+artifact_uri: file:\C:\Users\DELL\Desktop\Data Science\mlops\mlruns/728723521009513254/c8839818f1c44181b9b5ed4629bd1215/artifacts
+end_time: 1771338506524
+entry_point_name: ''
+experiment_id: '728723521009513254'
+lifecycle_stage: active
+run_id: c8839818f1c44181b9b5ed4629bd1215
+run_name: crawling-trout-446
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771338486764
+status: 4
+tags: []
+user_id: DELL

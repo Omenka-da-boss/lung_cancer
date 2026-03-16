@@ -1,0 +1,14 @@
+artifact_uri: file:\C:\Users\DELL\Desktop\Data Science\mlops\mlruns/728723521009513254/c179bda0a59f461bae96db4d765c9b0b/artifacts
+end_time: 1771339292661
+entry_point_name: ''
+experiment_id: '728723521009513254'
+lifecycle_stage: active
+run_id: c179bda0a59f461bae96db4d765c9b0b
+run_name: painted-fox-552
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771339272857
+status: 4
+tags: []
+user_id: DELL

@@ -1,0 +1,10 @@
+artifact_location: file:\C:\Users\DELL\Desktop\Data Science\mlops\mlruns/728723521009513254/models/m-f1b04a4f044d49c79986073642f1d18c/artifacts
+creation_timestamp: 1771394522492
+experiment_id: '728723521009513254'
+last_updated_timestamp: 1771394543202
+model_id: m-f1b04a4f044d49c79986073642f1d18c
+model_type: null
+name: Model
+source_run_id: f19cf5caf7804e0f82a4c2d6b90b9a4c
+status: 2
+status_message: null

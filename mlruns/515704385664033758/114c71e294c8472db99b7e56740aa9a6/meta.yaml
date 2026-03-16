@@ -1,0 +1,14 @@
+artifact_uri: file:\C:\Users\DELL\Desktop\Data Science\mlops\mlruns/515704385664033758/114c71e294c8472db99b7e56740aa9a6/artifacts
+end_time: 1771329791143
+entry_point_name: ''
+experiment_id: '515704385664033758'
+lifecycle_stage: active
+run_id: 114c71e294c8472db99b7e56740aa9a6
+run_name: handsome-horse-561
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771329790830
+status: 4
+tags: []
+user_id: DELL

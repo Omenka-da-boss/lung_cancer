@@ -1,0 +1,14 @@
+artifact_uri: file:\C:\Users\DELL\Desktop\Data Science\mlops\mlruns/728723521009513254/f19cf5caf7804e0f82a4c2d6b90b9a4c/artifacts
+end_time: 1771394543470
+entry_point_name: ''
+experiment_id: '728723521009513254'
+lifecycle_stage: active
+run_id: f19cf5caf7804e0f82a4c2d6b90b9a4c
+run_name: serious-calf-2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771394514432
+status: 4
+tags: []
+user_id: DELL

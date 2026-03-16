@@ -1,0 +1,14 @@
+artifact_uri: file:\C:\Users\DELL\Desktop\Data Science\mlops\mlruns/728723521009513254/2a3e8edb7d414ca78be110798b4728f1/artifacts
+end_time: 1771359113777
+entry_point_name: ''
+experiment_id: '728723521009513254'
+lifecycle_stage: active
+run_id: 2a3e8edb7d414ca78be110798b4728f1
+run_name: abundant-cat-414
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771358545134
+status: 4
+tags: []
+user_id: DELL
