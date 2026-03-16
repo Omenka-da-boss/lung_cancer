@@ -2,6 +2,7 @@ import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 import sys
+import pandas as pd
 
 
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -29,9 +30,10 @@ class LungCancer(BaseModel):
 
 
 @app.post("/predict")
-def predict(data:LungCancer):
+def api_predict(data: LungCancer):
     try:
-        preds = predict(data.dict())
-        return {"Prediction: ",preds}
+        # df = pd.DataFrame([data.dict()])
+        out = predict(data.dict())
+        return {"prediction": out}
     except Exception as e:
-        return {"Error": {e}}
+        return {"error": str(e)}

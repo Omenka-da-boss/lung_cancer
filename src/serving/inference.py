@@ -38,10 +38,27 @@ MODEL_DIR = "run:7c58635c852547ef90914b0ee8a50e56"
 # MODEL_DIR = "/app/model"
 
 try:
-    # Load the trained XGBoost model in MLflow pyfunc format
-    # This ensures compatibility regardless of the underlying ML library
-    model = mlflow.pyfunc.load_model(MODEL_DIR)
-    print(f"✅ Model loaded successfully from {MODEL_DIR}")
+    from mlflow.tracking import MlflowClient
+    import mlflow.sklearn
+
+    # Connect to MLflow tracking server
+    mlflow.set_tracking_uri("http://localhost:5000")
+
+    client = MlflowClient()
+
+    # Find your experiment
+    experiment_name = "LungCancerExperiment"
+    experiment = client.get_experiment_by_name(experiment_name)
+    experiment_id = experiment.experiment_id
+
+    # Get the latest run
+    runs = client.search_runs(experiment_id, order_by=["start_time DESC"], max_results=1)
+    run_id = runs[0].info.run_id
+
+    # Load the model artifact
+    model_uri = f"runs:/{run_id}/model"
+    model = mlflow.sklearn.load_model(model_uri)
+    print(f"✅ Model loaded successfully from {model_uri}")
 except Exception as e:
     print(f"❌ Failed to load model from {MODEL_DIR}: {e}")
     # Fallback for local development (OPTIONAL)
@@ -60,10 +77,11 @@ except Exception as e:
         raise Exception(f"Failed to load model: {e}. Fallback failed: {fallback_error}")
 
 try:
-    feature_file = os.path.join("artifacts", "feature_columns.txt")
+    feature_file = os.path.join("artifacts", "features_columns.txt")
     with open(feature_file) as f:
         FEATURE_COLS = [ln.strip() for ln in f if ln.strip()]
     print(f"✅ Loaded {len(FEATURE_COLS)} feature columns from training")
+    print(f"✅ Loaded {FEATURE_COLS} feature columns from training")
 except Exception as e:
     raise Exception(f"Failed to load feature columns: {e}")
 
@@ -71,7 +89,8 @@ bin_map = {
     "gender": {"Male":1,"Female":0},
     "asbestos_exposure":{"Yes":1,"No":0},
     "secondhand_smoke_exposure": {"Yes":1,"No":0},
-    "family_history": {"Yes":1,"No":0}
+    "family_history": {"Yes":1,"No":0},
+    "copd_diagnosis": {"Yes":1,"No":0}
 }
 
 multi_map = {
@@ -81,50 +100,77 @@ multi_map = {
 
 num_cols = ["pack_years","age"]
 
-def clean_input(df:pd.DataFrame) -> pd.DataFrame:
+# def clean_input(df:pd.DataFrame) -> pd.DataFrame:
     
-    """ Transformation Pipeline:
-    1. Clean column names and handle data types
-    2. Apply deterministic binary encoding (using BINARY_MAP)
-    3. One-hot encode remaining categorical features  
-    4. Convert boolean columns to integers
-    5. Align features with training schema and order
-    """
+#     """ Transformation Pipeline:
+#     1. Clean column names and handle data types
+#     2. Apply deterministic binary encoding (using BINARY_MAP)
+#     3. One-hot encode remaining categorical features  
+#     4. Convert boolean columns to integers
+#     5. Align features with training schema and order
+#     """
+    
+#     df = df.copy()
+    
+#     df.columns = df.columns.str.strip()
+    
+#     for c in num_cols:
+#         if c in df.columns:
+#             df[c] = pd.to_numeric(df[c],errors='coerce')
+#             df[c] = df[c].fillna(0)
+    
+    
+#     for c,mapping in bin_map.items():
+#         if c in df.columns:
+#             df[c] = (df[c].astype(str).str.strip().map(mapping).astype("Int64").fillna(0).astype(int))
+    
+#     obj_cols = [ c for c in df.select_dtypes(include="object").columns]
+    
+#     multi_cols = [c for c in obj_cols if df[c].dropna().nunique() > 2]
+    
+#     for c in  multi_cols:
+#         print("Before Encoding ")
+#         print(df[c].value_counts())
+#         df[c] = df[c].astype(str).str.strip().map(mapping).fillna(0).astype(int)
+#         print("After Encoding ")
+#         print(df[c].value_counts())
+    
+#     bool_cols = df.select_dtypes(include=["bool"]).columns
+#     if len(bool_cols) > 0:
+#         df[bool_cols] = df[bool_cols].astype(int)
+#     return df
+
+def clean_input(df: pd.DataFrame) -> pd.DataFrame:
     
     df = df.copy()
-    
     df.columns = df.columns.str.strip()
     
+    # Numeric columns
     for c in num_cols:
         if c in df.columns:
-            df[c] = pd.to_numeric(df[c],errors='coerce')
-            df[c] = df[c].fillna(0)
+            df[c] = pd.to_numeric(df[c], errors='coerce').fillna(0)
     
-    
-    for c,mapping in bin_map.items():
+    # Binary mapping
+    for c, mapping in bin_map.items():
         if c in df.columns:
-            df[c] = (df[c].astype(str).str.strip().map(mapping).astype("Int64").fillna(0).astype(int))
+            df[c] = df[c].astype(str).str.strip().map(mapping).fillna(0).astype(int)
     
-    obj_cols = [ c for c in df.select_dtypes(include="object").columns]
+    # Multi-value mapping using multi_map
+    for c, mapping in multi_map.items():
+        if c in df.columns:
+            df[c] = df[c].astype(str).str.strip().map(mapping).fillna(0).astype(int)
     
-    multi_cols = [c for c in obj_cols if df[c].dropna().nunique() > 2]
-    
-    for c in  multi_cols:
-        print("Before Encoding ")
-        print(df[c].value_counts())
-        df[c] = encode.fit_transform(df[c])
-        print("After Encoding ")
-        print(df[c].value_counts())
-    
+    # Boolean columns (if any)
     bool_cols = df.select_dtypes(include=["bool"]).columns
     if len(bool_cols) > 0:
         df[bool_cols] = df[bool_cols].astype(int)
+    
     return df
     
 
 def predict(input_dict: dict):
     
-    df = pd.DataFrame(input_dict)
+    df = pd.DataFrame([input_dict])
     
     df_enc = clean_input(df)
     

@@ -1,8 +1,9 @@
 artifact_uri: file:\C:\Users\DELL\Desktop\Data Science\mlops\mlruns/515704385664033758/c79b2df64b994c3897456b51ef781373/artifacts
+deleted_time: 1773647557929
 end_time: 1771329666418
 entry_point_name: ''
 experiment_id: '515704385664033758'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: c79b2df64b994c3897456b51ef781373
 run_name: victorious-flea-706
 source_name: ''

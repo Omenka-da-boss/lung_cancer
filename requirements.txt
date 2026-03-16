@@ -1,0 +1,14 @@
+catboost==1.2.8
+fastapi==0.135.1
+great_expectations==0.18.15
+joblib==1.5.3
+mlflow==3.8.1
+mlflow_skinny==3.8.1
+mlflow_tracing==3.8.1
+numpy==2.4.3
+optuna==4.6.0
+pandas==3.0.1
+posthog==7.4.2
+pydantic==2.12.5
+scikit_learn==1.8.0
+xgboost==3.2.0

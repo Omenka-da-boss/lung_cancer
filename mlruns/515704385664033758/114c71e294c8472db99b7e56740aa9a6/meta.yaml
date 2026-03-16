@@ -1,8 +1,9 @@
 artifact_uri: file:\C:\Users\DELL\Desktop\Data Science\mlops\mlruns/515704385664033758/114c71e294c8472db99b7e56740aa9a6/artifacts
+deleted_time: 1773647557914
 end_time: 1771329791143
 entry_point_name: ''
 experiment_id: '515704385664033758'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: 114c71e294c8472db99b7e56740aa9a6
 run_name: handsome-horse-561
 source_name: ''

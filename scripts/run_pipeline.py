@@ -208,7 +208,7 @@ def main(args):
         print(f"\n⏱️  Performance Summary:")
         print(f"   Training time: {start_time:.2f}s")
         print(f"   Inference time: {pred_time:.4f}s")
-        print(f"   Samples per second: {len(x_test)/pred_time:.0f}")
+        # print(f"   Samples per second: {len(x_test)/pred_time:.0f}")
         print(f"   Accuracy Score: {acc * 100 :.0f}%")
         
         print(f"\n📈 Detailed Classification Report:")
@@ -223,7 +223,7 @@ if __name__ == "__main__":
     p.add_argument("--target", type=str, default="lung_cancer")
     p.add_argument("--threshold", type=float, default=0.30)
     p.add_argument("--test_size", type=float, default=0.2)
-    p.add_argument("--experiment", type=str, default="Updated Experiment")
+    p.add_argument("--experiment", type=str, default="LungCancerExperiment")
     p.add_argument("--mlflow_uri", type=str, default=None,
                     help="override MLflow tracking URI, else uses project_root/mlruns")
 
