@@ -15,7 +15,7 @@ def validate_data(df):
     except:
         datasource = context.sources.add_pandas(datasource_name)
 
-    # Add dataframe asset (THIS WAS MISSING)
+
     asset_name = "lung_cancer_data"
 
     try:

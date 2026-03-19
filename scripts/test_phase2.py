@@ -4,6 +4,7 @@ from xgboost import XGBClassifier
 import optuna
 import os
 import sys
+from catboost import CatBoostClassifier
 
 print("=== Phase 2: Modeling with XGBoost ===")
 
@@ -39,22 +40,18 @@ X_train, X_test, y_train, y_test = train_test_split(
 THRESHOLD = 0.4
 
 def objective(trial):
-    params = {
-        "n_estimators": trial.suggest_int("n_estimators", 300, 800),
-        "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.2),
-        "max_depth": trial.suggest_int("max_depth", 3, 10),
-        "subsample": trial.suggest_float("subsample", 0.5, 1.0),
-        "colsample_bytree": trial.suggest_float("colsample_bytree", 0.5, 1.0),
-        "min_child_weight": trial.suggest_int("min_child_weight", 1, 10),
-        "gamma": trial.suggest_float("gamma", 0, 5),
-        "reg_alpha": trial.suggest_float("reg_alpha", 0, 5),
-        "reg_lambda": trial.suggest_float("reg_lambda", 0, 5),
-        "random_state": 42,
-        "n_jobs": -1,
-        "scale_pos_weight": (y_train == 0).sum() / (y_train == 1).sum(),
-        "eval_metric": "logloss",
+    param = {
+            "iterations": trial.suggest_int("iterations", 100, 1500),
+            "learning_rate": trial.suggest_float("learning_rate", 1e-3, 0.3, log=True),
+            "depth": trial.suggest_int("depth", 4, 10),
+            "l2_leaf_reg": trial.suggest_float("l2_leaf_reg", 1e-2, 20.0),
+            "random_strength": trial.suggest_float("random_strength", 1e-2, 10.0),
+            "bagging_temperature": trial.suggest_float("bagging_temperature", 0.0, 1.0),
+            "verbose": False,
+            "allow_writing_files": False
     }
-    model = XGBClassifier(**params)
+
+    model = CatBoostClassifier(**param)
     model.fit(X_train, y_train)
     proba = model.predict_proba(X_test)[:, 1]
     y_pred = (proba >= THRESHOLD).astype(int)

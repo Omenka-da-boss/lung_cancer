@@ -33,7 +33,7 @@ import glob
 #     except Exception as fallback_error:
 #         raise Exception(f"Failed to load model: {e}. Fallback failed: {fallback_error}")
 
-MODEL_DIR = "run:7c58635c852547ef90914b0ee8a50e56"
+# MODEL_DIR = "run:7c58635c852547ef90914b0ee8a50e56"
 
 # MODEL_DIR = "/app/model"
 
@@ -60,11 +60,9 @@ try:
     model = mlflow.sklearn.load_model(model_uri)
     print(f"✅ Model loaded successfully from {model_uri}")
 except Exception as e:
-    print(f"❌ Failed to load model from {MODEL_DIR}: {e}")
+    print(f"❌ Failed to load model from {model_uri}: {e}")
     # Fallback for local development (OPTIONAL)
     try:
-        # Try loading from local MLflow tracking
-        import glob
         model_path = './models/model.pkl'
         if model_path:
         #     latest_model = max(local_model_paths, key=os.path.getmtime)
@@ -100,47 +98,18 @@ multi_map = {
 
 num_cols = ["pack_years","age"]
 
-# def clean_input(df:pd.DataFrame) -> pd.DataFrame:
+
     
-#     """ Transformation Pipeline:
-#     1. Clean column names and handle data types
-#     2. Apply deterministic binary encoding (using BINARY_MAP)
-#     3. One-hot encode remaining categorical features  
-#     4. Convert boolean columns to integers
-#     5. Align features with training schema and order
-#     """
-    
-#     df = df.copy()
-    
-#     df.columns = df.columns.str.strip()
-    
-#     for c in num_cols:
-#         if c in df.columns:
-#             df[c] = pd.to_numeric(df[c],errors='coerce')
-#             df[c] = df[c].fillna(0)
-    
-    
-#     for c,mapping in bin_map.items():
-#         if c in df.columns:
-#             df[c] = (df[c].astype(str).str.strip().map(mapping).astype("Int64").fillna(0).astype(int))
-    
-#     obj_cols = [ c for c in df.select_dtypes(include="object").columns]
-    
-#     multi_cols = [c for c in obj_cols if df[c].dropna().nunique() > 2]
-    
-#     for c in  multi_cols:
-#         print("Before Encoding ")
-#         print(df[c].value_counts())
-#         df[c] = df[c].astype(str).str.strip().map(mapping).fillna(0).astype(int)
-#         print("After Encoding ")
-#         print(df[c].value_counts())
-    
-#     bool_cols = df.select_dtypes(include=["bool"]).columns
-#     if len(bool_cols) > 0:
-#         df[bool_cols] = df[bool_cols].astype(int)
-#     return df
 
 def clean_input(df: pd.DataFrame) -> pd.DataFrame:
+    
+    """ Transformation Pipeline:
+    1. Clean column names and handle data types
+    2. Apply deterministic binary encoding (using BINARY_MAP)
+    3. One-hot encode remaining categorical features  
+    4. Convert boolean columns to integers
+    5. Align features with training schema and order
+    """
     
     df = df.copy()
     df.columns = df.columns.str.strip()
@@ -150,17 +119,17 @@ def clean_input(df: pd.DataFrame) -> pd.DataFrame:
         if c in df.columns:
             df[c] = pd.to_numeric(df[c], errors='coerce').fillna(0)
     
-    # Binary mapping
+
     for c, mapping in bin_map.items():
         if c in df.columns:
             df[c] = df[c].astype(str).str.strip().map(mapping).fillna(0).astype(int)
     
-    # Multi-value mapping using multi_map
+    
     for c, mapping in multi_map.items():
         if c in df.columns:
             df[c] = df[c].astype(str).str.strip().map(mapping).fillna(0).astype(int)
     
-    # Boolean columns (if any)
+
     bool_cols = df.select_dtypes(include=["bool"]).columns
     if len(bool_cols) > 0:
         df[bool_cols] = df[bool_cols].astype(int)
@@ -193,35 +162,3 @@ def predict(input_dict: dict):
     else:
         return "Unlikely to have Lung Cancer"
     
-"""
-try:
-    model = mlflow.pyfunc.load_model(MODEL_DIR)
-    print(f"✅ Model loaded successfully from {MODEL_DIR}")
-    
-    if Exception:
-        import glob
-        
-        model_path  =  "models\\model.pkl"
-        
-        if model_path:
-            model = joblib.load(model_path)
-        else:
-            raise FileExistsError("File not found in directory") 
-
-except Exception as e:
-    print(f"✅ Model not found {MODEL_DIR}")
-     
-    try:
-        import glob
-        
-        model_path  =  "models\\model.pkl"
-        
-        if model_path:
-            model = joblib.load(model_path)
-        else:
-            raise FileExistsError("File not found in directory")
-    
-    except Exception as fallback_error:
-        raise Exception(f"Failed to load model: {e}. Fallback failed: {fallback_error}")
-    
-"""
