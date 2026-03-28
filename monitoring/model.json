@@ -1,0 +1,68 @@
+{
+   "accuracy score": {
+      "Reference Accuracy": 0.7145,
+      "Current Accuracy": 0.7093333333333334
+   },
+   "precision score": {
+      "Reference Precision": 0.7328403532766175,
+      "Current Precision": 0.7257142857142858
+   },
+   "recall score": {
+      "Reference Recall": 0.9199743918053778,
+      "Current Recall": 0.9261059795819154
+   },
+   "f1 score": {
+      "Reference F1 Score": 0.8158135814097519,
+      "Current F1 Score": 0.813754805638616
+   },
+   "confusion matrix": {
+      "Reference Confusion matrix": {
+         "labels": [
+            0,
+            1
+         ],
+         "values": [
+            [
+               4111,
+               11525
+            ],
+            [
+               2750,
+               31614
+            ]
+         ]
+      },
+      "Current Confusion matrix": {
+         "labels": [
+            0,
+            1
+         ],
+         "values": [
+            [
+               223,
+               720
+            ],
+            [
+               152,
+               1905
+            ]
+         ]
+      }
+   },
+   "fpr": {
+      "Reference fpr": 0.7370810949091839,
+      "Current fpr": 0.7635206786850477
+   },
+   "fnr": {
+      "Reference fnr": 0.08002560819462227,
+      "Current fnr": 0.07389402041808459
+   },
+   "tpr": {
+      "Reference tpr": 0.9199743918053778,
+      "Current tpr": 0.9261059795819154
+   },
+   "tnr": {
+      "Reference tnr": 0.26291890509081606,
+      "Current tnr": 0.23647932131495228
+   }
+}

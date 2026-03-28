@@ -1,0 +1,23 @@
+❌ Some tests failed.
+No. of passed tests: 41
+
+Failed 9 out of 50 tests.
+
+  ❌ Drift per Column: The drift score for the feature **age** is 0.206. The drift detection method is Wasserstein distance (normed). The drift detection threshold is 0.1.
+
+  ❌ Drift per Column: The drift score for the feature **pack_years** is 0.287. The drift detection method is Wasserstein distance (normed). The drift detection threshold is 0.1.
+
+  ❌ Share of the Most Common Value: The most common value in the column **patient_id** is 150000. Its share is 0.0003. The test threshold is eq=0 ± 1e-12.
+
+  ❌ Share of the Most Common Value: The most common value in the column **age** is 100. Its share is 0.0727. The test threshold is eq=0.0134 ± 0.00134.
+
+  ❌ Share of the Most Common Value: The most common value in the column **pack_years** is 12.87574750246346. Its share is 0.0003. The test threshold is eq=0 ± 1e-12.
+
+  ❌ Share of the Most Common Value: The most common value in the column **radon_exposure** is High. Its share is 0.405. The test threshold is eq=0.334 ± 0.0334.
+
+  ❌ Number of Rows: The number of rows is 3000. The test threshold is eq=5e+04 ± 5e+03.
+
+  ❌ Share of Out-of-Range Values: The share of values out of range in the column **pack_years** is 0.13 (390 out of 3000).  The test threshold is eq=0 ± 1e-12.
+
+  ❌ Share of Out-of-List Values: The share of values out of list in the column **alcohol_consumption** is 0.324 (971 out of 3000). The test threshold is eq=0 ± 1e-12.
+

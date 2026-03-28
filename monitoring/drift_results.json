@@ -1,0 +1,21 @@
+{
+  "dataset_drift": false,
+  "drift_score": 0.5,
+  "number_of_drifted_columns": 2,
+  "drifted_columns": [
+    {
+      "col_name": "age",
+      "drift_score": 0.20633140613758683,
+      "test": "Wasserstein distance (normed)",
+      "stattest_threshold": 0.1,
+      "drift_detected": true
+    },
+    {
+      "col_name": "pack_years",
+      "drift_score": 0.28673119774014716,
+      "test": "Wasserstein distance (normed)",
+      "stattest_threshold": 0.1,
+      "drift_detected": true
+    }
+  ]
+}

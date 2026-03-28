@@ -1,0 +1,905 @@
+{
+   "tests": [
+      {
+         "name": "Share of Drifted Columns",
+         "description": "The drift is detected for 20% features (2 out of 10). The test threshold is lt=0.3",
+         "status": "SUCCESS",
+         "group": "data_drift",
+         "parameters": {
+            "condition": {
+               "lt": 0.3
+            },
+            "features": {
+               "lung_cancer": {
+                  "stattest": "Jensen-Shannon distance",
+                  "score": 0.001,
+                  "threshold": 0.1,
+                  "detected": false
+               },
+               "age": {
+                  "stattest": "Wasserstein distance (normed)",
+                  "score": 0.206,
+                  "threshold": 0.1,
+                  "detected": true
+               },
+               "pack_years": {
+                  "stattest": "Wasserstein distance (normed)",
+                  "score": 0.287,
+                  "threshold": 0.1,
+                  "detected": true
+               },
+               "gender": {
+                  "stattest": "Jensen-Shannon distance",
+                  "score": 0.001,
+                  "threshold": 0.1,
+                  "detected": false
+               },
+               "radon_exposure": {
+                  "stattest": "Jensen-Shannon distance",
+                  "score": 0.06,
+                  "threshold": 0.1,
+                  "detected": false
+               },
+               "asbestos_exposure": {
+                  "stattest": "Jensen-Shannon distance",
+                  "score": 0.002,
+                  "threshold": 0.1,
+                  "detected": false
+               },
+               "secondhand_smoke_exposure": {
+                  "stattest": "Jensen-Shannon distance",
+                  "score": 0.004,
+                  "threshold": 0.1,
+                  "detected": false
+               },
+               "copd_diagnosis": {
+                  "stattest": "Jensen-Shannon distance",
+                  "score": 0.005,
+                  "threshold": 0.1,
+                  "detected": false
+               },
+               "alcohol_consumption": {
+                  "stattest": "Jensen-Shannon distance",
+                  "score": 0.001,
+                  "threshold": 0.1,
+                  "detected": false
+               },
+               "family_history": {
+                  "stattest": "Jensen-Shannon distance",
+                  "score": 0.002,
+                  "threshold": 0.1,
+                  "detected": false
+               }
+            }
+         }
+      },
+      {
+         "name": "Drift per Column",
+         "description": "The drift score for the feature **lung_cancer** is 0.001. The drift detection method is Jensen-Shannon distance. The drift detection threshold is 0.1.",
+         "status": "SUCCESS",
+         "group": "data_drift",
+         "parameters": {
+            "stattest": "Jensen-Shannon distance",
+            "score": 0.001,
+            "threshold": 0.1,
+            "detected": false,
+            "column_name": "lung_cancer"
+         }
+      },
+      {
+         "name": "Drift per Column",
+         "description": "The drift score for the feature **gender** is 0.001. The drift detection method is Jensen-Shannon distance. The drift detection threshold is 0.1.",
+         "status": "SUCCESS",
+         "group": "data_drift",
+         "parameters": {
+            "stattest": "Jensen-Shannon distance",
+            "score": 0.001,
+            "threshold": 0.1,
+            "detected": false,
+            "column_name": "gender"
+         }
+      },
+      {
+         "name": "Drift per Column",
+         "description": "The drift score for the feature **radon_exposure** is 0.06. The drift detection method is Jensen-Shannon distance. The drift detection threshold is 0.1.",
+         "status": "SUCCESS",
+         "group": "data_drift",
+         "parameters": {
+            "stattest": "Jensen-Shannon distance",
+            "score": 0.06,
+            "threshold": 0.1,
+            "detected": false,
+            "column_name": "radon_exposure"
+         }
+      },
+      {
+         "name": "Drift per Column",
+         "description": "The drift score for the feature **asbestos_exposure** is 0.002. The drift detection method is Jensen-Shannon distance. The drift detection threshold is 0.1.",
+         "status": "SUCCESS",
+         "group": "data_drift",
+         "parameters": {
+            "stattest": "Jensen-Shannon distance",
+            "score": 0.002,
+            "threshold": 0.1,
+            "detected": false,
+            "column_name": "asbestos_exposure"
+         }
+      },
+      {
+         "name": "Drift per Column",
+         "description": "The drift score for the feature **secondhand_smoke_exposure** is 0.004. The drift detection method is Jensen-Shannon distance. The drift detection threshold is 0.1.",
+         "status": "SUCCESS",
+         "group": "data_drift",
+         "parameters": {
+            "stattest": "Jensen-Shannon distance",
+            "score": 0.004,
+            "threshold": 0.1,
+            "detected": false,
+            "column_name": "secondhand_smoke_exposure"
+         }
+      },
+      {
+         "name": "Drift per Column",
+         "description": "The drift score for the feature **copd_diagnosis** is 0.005. The drift detection method is Jensen-Shannon distance. The drift detection threshold is 0.1.",
+         "status": "SUCCESS",
+         "group": "data_drift",
+         "parameters": {
+            "stattest": "Jensen-Shannon distance",
+            "score": 0.005,
+            "threshold": 0.1,
+            "detected": false,
+            "column_name": "copd_diagnosis"
+         }
+      },
+      {
+         "name": "Drift per Column",
+         "description": "The drift score for the feature **alcohol_consumption** is 0.001. The drift detection method is Jensen-Shannon distance. The drift detection threshold is 0.1.",
+         "status": "SUCCESS",
+         "group": "data_drift",
+         "parameters": {
+            "stattest": "Jensen-Shannon distance",
+            "score": 0.001,
+            "threshold": 0.1,
+            "detected": false,
+            "column_name": "alcohol_consumption"
+         }
+      },
+      {
+         "name": "Drift per Column",
+         "description": "The drift score for the feature **family_history** is 0.002. The drift detection method is Jensen-Shannon distance. The drift detection threshold is 0.1.",
+         "status": "SUCCESS",
+         "group": "data_drift",
+         "parameters": {
+            "stattest": "Jensen-Shannon distance",
+            "score": 0.002,
+            "threshold": 0.1,
+            "detected": false,
+            "column_name": "family_history"
+         }
+      },
+      {
+         "name": "Drift per Column",
+         "description": "The drift score for the feature **age** is 0.206. The drift detection method is Wasserstein distance (normed). The drift detection threshold is 0.1.",
+         "status": "FAIL",
+         "group": "data_drift",
+         "parameters": {
+            "stattest": "Wasserstein distance (normed)",
+            "score": 0.206,
+            "threshold": 0.1,
+            "detected": true,
+            "column_name": "age"
+         }
+      },
+      {
+         "name": "Drift per Column",
+         "description": "The drift score for the feature **pack_years** is 0.287. The drift detection method is Wasserstein distance (normed). The drift detection threshold is 0.1.",
+         "status": "FAIL",
+         "group": "data_drift",
+         "parameters": {
+            "stattest": "Wasserstein distance (normed)",
+            "score": 0.287,
+            "threshold": 0.1,
+            "detected": true,
+            "column_name": "pack_years"
+         }
+      },
+      {
+         "name": "The Share of Missing Values in a Column",
+         "description": "The share of missing values in the column **patient_id** is 0. The test threshold is lte=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "column_name": "patient_id"
+         }
+      },
+      {
+         "name": "The Share of Missing Values in a Column",
+         "description": "The share of missing values in the column **lung_cancer** is 0. The test threshold is lte=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "column_name": "lung_cancer"
+         }
+      },
+      {
+         "name": "The Share of Missing Values in a Column",
+         "description": "The share of missing values in the column **age** is 0. The test threshold is lte=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "column_name": "age"
+         }
+      },
+      {
+         "name": "The Share of Missing Values in a Column",
+         "description": "The share of missing values in the column **pack_years** is 0. The test threshold is lte=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "column_name": "pack_years"
+         }
+      },
+      {
+         "name": "The Share of Missing Values in a Column",
+         "description": "The share of missing values in the column **gender** is 0. The test threshold is lte=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "column_name": "gender"
+         }
+      },
+      {
+         "name": "The Share of Missing Values in a Column",
+         "description": "The share of missing values in the column **radon_exposure** is 0. The test threshold is lte=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "column_name": "radon_exposure"
+         }
+      },
+      {
+         "name": "The Share of Missing Values in a Column",
+         "description": "The share of missing values in the column **asbestos_exposure** is 0. The test threshold is lte=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "column_name": "asbestos_exposure"
+         }
+      },
+      {
+         "name": "The Share of Missing Values in a Column",
+         "description": "The share of missing values in the column **secondhand_smoke_exposure** is 0. The test threshold is lte=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "column_name": "secondhand_smoke_exposure"
+         }
+      },
+      {
+         "name": "The Share of Missing Values in a Column",
+         "description": "The share of missing values in the column **copd_diagnosis** is 0. The test threshold is lte=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "column_name": "copd_diagnosis"
+         }
+      },
+      {
+         "name": "The Share of Missing Values in a Column",
+         "description": "The share of missing values in the column **alcohol_consumption** is 0.324. The test threshold is lte=0.333 \u00b1 0.0333.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": {
+                  "value": 0.33324,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.32366666666666666,
+            "column_name": "alcohol_consumption"
+         }
+      },
+      {
+         "name": "The Share of Missing Values in a Column",
+         "description": "The share of missing values in the column **family_history** is 0. The test threshold is lte=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "column_name": "family_history"
+         }
+      },
+      {
+         "name": "Share of the Most Common Value",
+         "description": "The most common value in the column **patient_id** is 150000. Its share is 0.0003. The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "FAIL",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0003,
+            "column_name": "patient_id"
+         }
+      },
+      {
+         "name": "Share of the Most Common Value",
+         "description": "The most common value in the column **lung_cancer** is Yes. Its share is 0.686. The test threshold is eq=0.687 \u00b1 0.0687.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.6873,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.6857,
+            "column_name": "lung_cancer"
+         }
+      },
+      {
+         "name": "Share of the Most Common Value",
+         "description": "The most common value in the column **age** is 100. Its share is 0.0727. The test threshold is eq=0.0134 \u00b1 0.00134.",
+         "status": "FAIL",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.0134,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0727,
+            "column_name": "age"
+         }
+      },
+      {
+         "name": "Share of the Most Common Value",
+         "description": "The most common value in the column **pack_years** is 12.87574750246346. Its share is 0.0003. The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "FAIL",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0003,
+            "column_name": "pack_years"
+         }
+      },
+      {
+         "name": "Share of the Most Common Value",
+         "description": "The most common value in the column **gender** is Female. Its share is 0.503. The test threshold is eq=0.502 \u00b1 0.0502.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.5017,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.5033,
+            "column_name": "gender"
+         }
+      },
+      {
+         "name": "Share of the Most Common Value",
+         "description": "The most common value in the column **radon_exposure** is High. Its share is 0.405. The test threshold is eq=0.334 \u00b1 0.0334.",
+         "status": "FAIL",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.3336,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.4047,
+            "column_name": "radon_exposure"
+         }
+      },
+      {
+         "name": "Share of the Most Common Value",
+         "description": "The most common value in the column **asbestos_exposure** is No. Its share is 0.501. The test threshold is eq=0.503 \u00b1 0.0503.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.503,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.5007,
+            "column_name": "asbestos_exposure"
+         }
+      },
+      {
+         "name": "Share of the Most Common Value",
+         "description": "The most common value in the column **secondhand_smoke_exposure** is Yes. Its share is 0.507. The test threshold is eq=0.501 \u00b1 0.0501.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.5013000000000001,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.507,
+            "column_name": "secondhand_smoke_exposure"
+         }
+      },
+      {
+         "name": "Share of the Most Common Value",
+         "description": "The most common value in the column **copd_diagnosis** is No. Its share is 0.506. The test threshold is eq=0.501 \u00b1 0.0501.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.5013000000000001,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.506,
+            "column_name": "copd_diagnosis"
+         }
+      },
+      {
+         "name": "Share of the Most Common Value",
+         "description": "The most common value in the column **alcohol_consumption** is Heavy. Its share is 0.339. The test threshold is eq=0.335 \u00b1 0.0335.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.33520000000000005,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.33899999999999997,
+            "column_name": "alcohol_consumption"
+         }
+      },
+      {
+         "name": "Share of the Most Common Value",
+         "description": "The most common value in the column **family_history** is No. Its share is 0.504. The test threshold is eq=0.5 \u00b1 0.05.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.5003,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.5036999999999999,
+            "column_name": "family_history"
+         }
+      },
+      {
+         "name": "Number of Constant Columns",
+         "description": "The number of constant columns is 0. The test threshold is lte=0.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": 0
+            },
+            "value": 0.0
+         }
+      },
+      {
+         "name": "Number of Duplicate Columns",
+         "description": "The number of duplicate columns is 0. The test threshold is lte=0.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "lte": 0
+            },
+            "value": 0.0
+         }
+      },
+      {
+         "name": "Number of Duplicate Rows",
+         "description": "The number of duplicate rows is 0. The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0.0,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0
+         }
+      },
+      {
+         "name": "Number of Rows",
+         "description": "The number of rows is 3000. The test threshold is eq=5e+04 \u00b1 5e+03.",
+         "status": "FAIL",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 50000,
+                  "relative": 0.1,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 3000.0
+         }
+      },
+      {
+         "name": "Number of Columns",
+         "description": "The number of columns is 11. The test threshold is eq=11.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "condition": {
+               "eq": 11
+            },
+            "value": 11.0
+         }
+      },
+      {
+         "name": "Column Types",
+         "description": "The number of columns with a type mismatch is 0 out of 11.",
+         "status": "SUCCESS",
+         "group": "data_integrity",
+         "parameters": {
+            "columns": [
+               {
+                  "actual_type": "int64",
+                  "column_name": "patient_id",
+                  "expected_type": "int64"
+               },
+               {
+                  "actual_type": "int64",
+                  "column_name": "age",
+                  "expected_type": "int64"
+               },
+               {
+                  "actual_type": "object_",
+                  "column_name": "gender",
+                  "expected_type": "object_"
+               },
+               {
+                  "actual_type": "float64",
+                  "column_name": "pack_years",
+                  "expected_type": "float64"
+               },
+               {
+                  "actual_type": "object_",
+                  "column_name": "radon_exposure",
+                  "expected_type": "object_"
+               },
+               {
+                  "actual_type": "object_",
+                  "column_name": "asbestos_exposure",
+                  "expected_type": "object_"
+               },
+               {
+                  "actual_type": "object_",
+                  "column_name": "secondhand_smoke_exposure",
+                  "expected_type": "object_"
+               },
+               {
+                  "actual_type": "object_",
+                  "column_name": "copd_diagnosis",
+                  "expected_type": "object_"
+               },
+               {
+                  "actual_type": "object_",
+                  "column_name": "alcohol_consumption",
+                  "expected_type": "object_"
+               },
+               {
+                  "actual_type": "object_",
+                  "column_name": "family_history",
+                  "expected_type": "object_"
+               },
+               {
+                  "actual_type": "object_",
+                  "column_name": "lung_cancer",
+                  "expected_type": "object_"
+               }
+            ]
+         }
+      },
+      {
+         "name": "Share of Out-of-Range Values",
+         "description": "The share of values out of range in the column **age** is 0 (0 out of 3000).  The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0,
+                  "relative": 1e-06,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "left": null,
+            "right": null
+         }
+      },
+      {
+         "name": "Share of Out-of-Range Values",
+         "description": "The share of values out of range in the column **pack_years** is 0.13 (390 out of 3000).  The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "FAIL",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0,
+                  "relative": 1e-06,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.13,
+            "left": null,
+            "right": null
+         }
+      },
+      {
+         "name": "Share of Out-of-List Values",
+         "description": "The share of values out of list in the column **gender** is 0 (0 out of 3000). The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0,
+                  "relative": 1e-06,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "values": null
+         }
+      },
+      {
+         "name": "Share of Out-of-List Values",
+         "description": "The share of values out of list in the column **radon_exposure** is 0 (0 out of 3000). The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0,
+                  "relative": 1e-06,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "values": null
+         }
+      },
+      {
+         "name": "Share of Out-of-List Values",
+         "description": "The share of values out of list in the column **asbestos_exposure** is 0 (0 out of 3000). The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0,
+                  "relative": 1e-06,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "values": null
+         }
+      },
+      {
+         "name": "Share of Out-of-List Values",
+         "description": "The share of values out of list in the column **secondhand_smoke_exposure** is 0 (0 out of 3000). The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0,
+                  "relative": 1e-06,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "values": null
+         }
+      },
+      {
+         "name": "Share of Out-of-List Values",
+         "description": "The share of values out of list in the column **copd_diagnosis** is 0 (0 out of 3000). The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0,
+                  "relative": 1e-06,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "values": null
+         }
+      },
+      {
+         "name": "Share of Out-of-List Values",
+         "description": "The share of values out of list in the column **alcohol_consumption** is 0.324 (971 out of 3000). The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "FAIL",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0,
+                  "relative": 1e-06,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.32366666666666666,
+            "values": null
+         }
+      },
+      {
+         "name": "Share of Out-of-List Values",
+         "description": "The share of values out of list in the column **family_history** is 0 (0 out of 3000). The test threshold is eq=0 \u00b1 1e-12.",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "condition": {
+               "eq": {
+                  "value": 0,
+                  "relative": 1e-06,
+                  "absolute": 1e-12
+               }
+            },
+            "value": 0.0,
+            "values": null
+         }
+      },
+      {
+         "name": "Mean Value Stability",
+         "description": "The mean value of the column **age** is 63.8. The expected range is from 10.9 to 107",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "column_name": "age",
+            "current_mean": 63.8,
+            "n_sigmas": 2,
+            "reference_mean": 58.86,
+            "reference_std": 23.96
+         }
+      },
+      {
+         "name": "Mean Value Stability",
+         "description": "The mean value of the column **pack_years** is 58.2. The expected range is from -7.74 to 108",
+         "status": "SUCCESS",
+         "group": "data_quality",
+         "parameters": {
+            "column_name": "pack_years",
+            "current_mean": 58.23,
+            "n_sigmas": 2,
+            "reference_mean": 49.96,
+            "reference_std": 28.85
+         }
+      }
+   ],
+   "summary": {
+      "all_passed": false,
+      "total_tests": 50,
+      "success_tests": 41,
+      "failed_tests": 9,
+      "by_status": {
+         "SUCCESS": 41,
+         "FAIL": 9
+      }
+   }
+}

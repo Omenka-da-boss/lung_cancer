@@ -1,0 +1,102 @@
+{
+   "Report per column": {
+      "missing values per columns": [
+         {
+            "Reference Data": {
+               "patient_id": 0,
+               "age": 0,
+               "gender": 0,
+               "pack_years": 0,
+               "radon_exposure": 0,
+               "asbestos_exposure": 0,
+               "secondhand_smoke_exposure": 0,
+               "copd_diagnosis": 0,
+               "alcohol_consumption": 16662,
+               "family_history": 0,
+               "lung_cancer": 0
+            },
+            "Current Data": {
+               "patient_id": 0,
+               "age": 0,
+               "gender": 0,
+               "pack_years": 0,
+               "radon_exposure": 0,
+               "asbestos_exposure": 0,
+               "secondhand_smoke_exposure": 0,
+               "copd_diagnosis": 0,
+               "alcohol_consumption": 971,
+               "family_history": 0,
+               "lung_cancer": 0
+            }
+         }
+      ],
+      "unique values in each column": [
+         {
+            "Reference Data": {
+               "patient_id": 50000,
+               "age": 83,
+               "gender": 2,
+               "pack_years": 50000,
+               "radon_exposure": 3,
+               "asbestos_exposure": 2,
+               "secondhand_smoke_exposure": 2,
+               "copd_diagnosis": 2,
+               "alcohol_consumption": 2,
+               "family_history": 2,
+               "lung_cancer": 2
+            },
+            "Current Data: ": {
+               "patient_id": 3000,
+               "age": 78,
+               "gender": 2,
+               "pack_years": 3000,
+               "radon_exposure": 3,
+               "asbestos_exposure": 2,
+               "secondhand_smoke_exposure": 2,
+               "copd_diagnosis": 2,
+               "alcohol_consumption": 2,
+               "family_history": 2,
+               "lung_cancer": 2
+            }
+         }
+      ]
+   },
+   "General Report": {
+      "total missing values": [
+         {
+            "Reference Dataset: ": 16662,
+            "Current Dataset: ": 971
+         }
+      ],
+      "total columns in dataset": [
+         {
+            "Reference Dataset: ": 11,
+            "Current Dataset: ": 11
+         }
+      ],
+      "duplicate rows": [
+         {
+            "Reference Dataset: ": 0,
+            "Current Dataset: ": 0
+         }
+      ],
+      "duplicate columns": [
+         {
+            "Refernce Dataset:": 0,
+            "Current Dataset: ": 0
+         }
+      ],
+      "No. of numeric columns": [
+         2
+      ],
+      "No. of category columns": [
+         7
+      ],
+      "Total Number of rows": [
+         {
+            "Reference Dataset: ": 50000,
+            "Current Dataset: ": 3000
+         }
+      ]
+   }
+}
