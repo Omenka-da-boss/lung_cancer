@@ -445,29 +445,30 @@ def classify_failure(test):
     status = test.get('status')
     if status != 'FAIL':
             return None
-    if name in ['Number of Rows', 'Number of Columns', 'Column Types']:
+    if name in ["Number of Rows",'Number of Columns','Column Types',"Share of Drifted Columns","Drift per Column","The Share of Missing Values in a Column","Share of the Most Common Value"]:
             return 'critical'
     if name == 'Share of Out-of-Range Values':
             share = test.get('parameters', {}).get('value', 0)
             return 'critical' if share > 0.1 else 'warning'
-    if name == 'Share of Out-of-List Values':
+    if name == "Share of Out-of-List Values":
         share = test.get('parameters', {}).get('value', 0)
         return 'critical' if share > 0.05 else 'warning'
     return 'warning'
 
     has_critical = False
+    critical_list = []
     warning_list = []
     for suite_dict in [suite1_dict, binary_dict, no_target_dict]:
         for test in suite_dict.get('tests', []):
             severity = classify_failure(test)
             if severity == 'critical':
                 has_critical = True
-                print(f"CRITICAL: {test['name']} - {test.get('description')}")
+                critical_list.append(f"{test['name']} : {test.get('description')}")
             elif severity == 'warning':
                 warning_list.append(f"{test['name']}: {test.get('description')}")
 
     # Print summary (optional)
-    if has_critical:
+    if critical_list:
         print("❌ Critical failures detected. Pipeline will fail.")
         return 1
     elif warning_list:
@@ -484,7 +485,7 @@ def is_critical_failure(failure):
     name = failure.get('name', '')
     
     # Critical by test type
-    critical_tests = ['Number of Rows', 'Number of Columns', 'Column Types']
+    critical_tests = ["Number of Rows",'Number of Columns','Column Types',"Share of Drifted Columns","Drift per Column","The Share of Missing Values in a Column","Share of the Most Common Value"]
     if name in critical_tests:
         return True
     
@@ -633,31 +634,37 @@ def slack_message_alert(alert_data,webhook_url):
         return
 
     if alert_data["critical_failures"]:
-        color = "#d9534"
+        color = "##d9534f"
         emoji = "🚨"
     else:
         color = "#f0ad4e"  
         emoji = "⚠️"
     
     # build slack report
+    passed = alert_data['summary']['passed']
+    total = alert_data['summary']['total']
+    percentage = (passed / total) * 100
     blocks = [
         {
             "type": "header",
-            "text": f"{emoji} Evidently Alert For Slack"
+            "text": {
+                "type": "plain_text",
+                "text": f"{emoji} Evidently Alert For Slack"
+            }
         },
         {
             "type": "section",
             "fields": [
                 {"type": "mrkdwn" , "text": f"Status: *\n {'❌ FAILED' if alert_data['should_alert'] else '✅ PASSED'}"},
-                {"type": "mrkdwn", "text": f"Passed Percentage: {alert_data["summary"]["passed"]/alert_data["summary"]["total"]}%" },
-                {"type": "mrkdwn","text": f"Failed Tests: {alert_data["summary"]["failed"]}"},
-                {"type": "mrkdwn","text": f"Time stamp: {alert_data["timestamp"]}"}
+                {"type": "mrkdwn", "text": f"Passed Percentage: {percentage}%" },
+                {"type": "mrkdwn","text": f"Failed Tests: {alert_data['summary']['failed']}"},
+                {"type": "mrkdwn","text": f"Time stamp: {alert_data['timestamp']}"}
             ]
         }
     ]
     
     if alert_data['critical_failures']:
-        critical_text = "\n".join([f"*{f['name']}*: {f["description"][:100]}" for f in alert_data["critical_failures"][:5]])
+        critical_text = "\n".join([f"*{f['name']}*: {f['description'][:100]}" for f in alert_data['critical_failures'][:5]])
         
         blocks.append({
             "type": "section",
@@ -668,7 +675,7 @@ def slack_message_alert(alert_data,webhook_url):
     
     if alert_data["warning_failures"]:
         warning_text = "\n".join([
-            f" * {f['name']}*: {f["description"][:100]}" for f in alert_data["warning_failures"][:5] 
+            f" * {f['name']}*: {f['description'][:100]}" for f in alert_data['warning_failures'][:5] 
         ])
         
         blocks.append({
@@ -679,7 +686,7 @@ def slack_message_alert(alert_data,webhook_url):
             }
         })
         
-    payload = {"text": "Test from Evidently"}
+    payload = {"text": "Tests From Ndubuisi Evidently","blocks":blocks}
     import requests
     try:
        response = requests.post(webhook_url,json=payload)

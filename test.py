@@ -1,26 +1,44 @@
-import smtplib
-from email.mime.text import MIMEText
+import os
+from evidently.ui.workspace import CloudWorkspace
+from evidently.errors import EvidentlyError
 
-def test_email():
-    sender = os.environ.get('ALERT_EMAIL_SENDER')
-    password = os.environ.get('ALERT_EMAIL_PASSWORD')
-    recipients = os.environ.get('ALERT_EMAIL_RECIPIENTS', '').split(',')
-    if not all([sender, password, recipients]):
-        print("Missing email env vars")
-        return
+# Load your environment variables
+from dotenv import load_dotenv
+load_dotenv()
 
-    msg = MIMEText("Test email from Evidently")
-    msg['Subject'] = "Test"
-    msg['From'] = sender
-    msg['To'] = ', '.join(recipients)
+ws_url = os.getenv("EVIDENTLY_WORKSPACE_URL", "https://app.evidently.cloud")
+ws_key = os.getenv("EVIDENTLY_API_KEY")
 
+# Connect to Evidently Cloud workspace
+ws = CloudWorkspace(
+    token=ws_key,
+    url=ws_url
+)
+
+project_name = "lung_cancer_pred"
+
+orgs = os.getenv("ORGS_ID")
+
+try:
+    # Attempt to list projects
+    projects = ws.list_projects()
+    print("List of projects fetched successfully.")
+except EvidentlyError as e:
+    print("Error listing projects:", e)
+    projects = []
+
+# Try to find the project by name
+project = next((p for p in projects if p.name == project_name), None)
+
+if project:
+    print(f"🟢 Project already exists: {project.name} (ID: {project.id})")
+else:
     try:
-        with smtplib.SMTP('smtp.gmail.com', 587) as server:
-            server.starttls()
-            server.login(sender, password)
-            server.send_message(msg)
-        print("✅ Test email sent")
-    except Exception as e:
-        print(f"❌ Email failed: {e}")
-
-test_email()
+        # Create the new project
+        project = ws.create_project(name=project_name,org_id=orgs)
+        # Save to actually persist the project
+        project.description = "A Lung Cancer Prediction Project With ML Pipeline"
+        project.save()
+        print(f"✅ Project '{project_name}' created successfully with ID: {project.id}")
+    except EvidentlyError as e:
+        print("❌ Failed to create project:", e)
