@@ -16,6 +16,8 @@ jobs:
                 python-version: "3.12"
             - name: Install dependency
               run: pip install -r requirements.txt
+            - name: Start Up Mlflow Server
+              run: mlflow ui
             - name: Run model building pipeline
               run: python scripts/run_pipeline.py --input data/lung_cancer_dataset.csv --target lung_cancer
 
