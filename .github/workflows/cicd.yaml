@@ -15,12 +15,12 @@ jobs:
               with:
                 python-version: "3.12"
             - name: Install dependency
-              run: pip install -r requirement.txt
+              run: pip install -r requirements.txt
     
     ci:
         runs-on: ubuntu-latest
         steps:
             - name: Run model building pipeline
               run: python scripts\run_pipeline.py
-              
+
 
