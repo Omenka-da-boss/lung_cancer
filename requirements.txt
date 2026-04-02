@@ -6,7 +6,7 @@ joblib==1.5.3
 mlflow==3.8.1
 mlflow_skinny==3.8.1
 mlflow_tracing==3.8.1
-numpy==2.4.4
+numpy==2.1.0
 optuna==4.6.0
 pandas==3.0.2
 posthog==7.4.2
