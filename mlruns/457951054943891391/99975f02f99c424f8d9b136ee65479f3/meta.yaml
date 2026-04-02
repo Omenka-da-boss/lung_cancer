@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/457951054943891391/99975f02f99c424f8d9b136ee65479f3/artifacts
+end_time: 1774785182158
+entry_point_name: ''
+experiment_id: '457951054943891391'
+lifecycle_stage: active
+run_id: 99975f02f99c424f8d9b136ee65479f3
+run_name: kindly-bug-864
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1774784770845
+status: 3
+tags: []
+user_id: DELL

@@ -5,8 +5,10 @@ from sklearn.metrics import recall_score,accuracy_score
 from sklearn.ensemble import RandomForestClassifier,StackingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from catboost import CatBoostClassifier
+from xgboost import XGBClassifier
 
 def hyper_tuning(x_train,y_train,x_test,y_test,threshold,y):
+    
     
     def objective(trial):
         param = {
@@ -19,19 +21,21 @@ def hyper_tuning(x_train,y_train,x_test,y_test,threshold,y):
             "verbose": False,
             "allow_writing_files": False
     }
+    
 
         model = CatBoostClassifier(**param)
+        # model = XGBClassifier(**params)
 
-        model.fit(x_train, y_train)
+        model.fit(x_train, y_train,eval_set=[(x_test,y_test)])
 
         
-        # proba = model.predict_proba(x_test)[:, 1]
-        # preds = (proba >= 0.35).astype(int)
-        preds = model.predict(x_test)
+        proba = model.predict_proba(x_test)[:, 1]
+        preds = (proba >= 0.35).astype(int)
+        # preds = model.predict(x_test)
         acc = accuracy_score(y_test,preds) * 100
         acc = round(acc,2)
         
-        if acc >= 71:
+        if acc >= 71.5:
             print("Accuracy Score:",acc)
             # return recall_score(y_test, preds)
             return recall_score(y_test,preds)
@@ -41,8 +45,12 @@ def hyper_tuning(x_train,y_train,x_test,y_test,threshold,y):
 
     study = optuna.create_study(direction="maximize")
     study.optimize(objective,n_trials=30)
-    return study.best_params
+    
+    params = study.best_params
+    
+    model = XGBClassifier(**params)
+    
+    return model,study.best_params
 
 
-    print("Best Params",study.best_params)
-    print("Best Recall ",study.best_value)
+

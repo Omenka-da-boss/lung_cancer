@@ -1,0 +1,34 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+# Alerting configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - 'alertmanager:9093'  # Point to Alertmanager service
+
+# Rule files
+rule_files:
+  - 'prometheus_rules.yml'
+
+# Scrape configurations
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+  
+  - job_name: 'ml_model'
+    static_configs:
+      - targets: ['localhost:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+    
+    # Add metadata labels for better grouping
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'http_requests_total'
+        action: replace
+        target_label: metric_type
+        replacement: 'latency'

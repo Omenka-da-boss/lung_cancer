@@ -24,19 +24,20 @@ def train_data(x_train,x_test,y_train,y_test,threshold):
   
 
     model = CatBoostClassifier(iterations=1000)
+    # model = XGBClassifier()
     
         # Training Time
     start_time = time.time()
     model.fit(x_train,y_train)
     end_time = time.time() - start_time
-    mlflow.log_metric("Train Time",end_time)
+    # mlflow.log_metric("Train Time",end_time)
         
         # Prediction Time
     start_time = time.time()
     preds = model.predict_proba(x_test)[:,1]
     y_preds = (preds >= threshold).astype(int)
     pred_time = time.time() - start_time
-    mlflow.log_metric("Prediction Time",pred_time)
+    # mlflow.log_metric("Prediction Time",pred_time)
         
         # Metrices
     precision = precision_score(y_test,y_preds,pos_label=1)
@@ -47,8 +48,10 @@ def train_data(x_train,x_test,y_train,y_test,threshold):
     
     # acc = accuracy_score(y_test,preds)
     # rec = recall_score(y_test,preds)
-    print("Accuracy",acc)
-    print("Recall Score",recall)
+    print("Accuracy:",acc)
+    print("Recall Score:",recall)
+    print("Precsion",precision)
+    print("Roc Auc:",roc_auc)
         
         # Log Metrics
     mlflow.log_metric("Precision",precision)

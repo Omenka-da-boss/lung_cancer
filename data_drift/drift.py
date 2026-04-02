@@ -715,6 +715,53 @@ def save_slack_message(alert_data,history_file="monitoring\\history_alert.json")
         json.dump(history,f,indent=3,ensure_ascii=False)
     print(f"✅ Alert history stored ({len(history)} total entries)")
 
+from twilio.rest import Client
+import os
+
+def whatsapp_alert(alert_data):
+    if not alert_data['should_alert']:
+        print("No failures detected - skipping WhatsApp alert")
+        return
+
+    # Load Twilio creds from environment variables
+    account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+    auth_token  = os.getenv("TWILIO_AUTH_TOKEN")
+    from_whatsapp_number = os.getenv("TWILIO_WHATSAPP_FROM")
+    to_whatsapp_number   = os.getenv("WHATSAPP_TO")
+    
+    print(to_whatsapp_number)
+
+    client = Client(account_sid, auth_token)
+
+    # Build the message
+    status = "❌ FAILED" if alert_data['should_alert'] else "✅ PASSED"
+    message_text = f"Evidently Alert\nStatus: {status}\n"
+    message_text += f"Passed: {alert_data['summary']['passed']}/{alert_data['summary']['total']}\n"
+    message_text += f"Failed Tests: {alert_data['summary']['failed']}\n"
+    message_text += f"Timestamp: {alert_data['timestamp']}\n"
+
+    if alert_data.get('critical_failures'):
+        critical_text = "\n".join([f"{f['name']}: {f['description'][:100]}" 
+                                   for f in alert_data['critical_failures'][:5]])
+        message_text += f"🚨 Critical Failures:\n{critical_text}\n"
+
+    if alert_data.get('warning_failures'):
+        warning_text = "\n".join([f"{f['name']}: {f['description'][:100]}" 
+                                  for f in alert_data['warning_failures'][:5]])
+        message_text += f"⚠️ Warning Failures:\n{warning_text}\n"
+
+    # Send WhatsApp message
+    try:
+        message = client.messages.create(
+            body=message_text,
+            from_=from_whatsapp_number,
+            to=to_whatsapp_number
+        )
+        print(message.sid)
+        print(message.status)
+        print("✅ WhatsApp alert sent:", message.sid)
+    except Exception as e:
+        print("❌ Failed to send WhatsApp alert:", e)
 
 def run_alerts(suite_dict):
     
@@ -733,6 +780,9 @@ def run_alerts(suite_dict):
         if SENDER_EMAIL and SENDER_PASSWORD and RECIPIENTS:
             send_email_alert(alert_data, SMTP_SERVER, SMTP_PORT, 
                            SENDER_EMAIL, SENDER_PASSWORD, RECIPIENTS)
+        
+        if alert_data["should_alert"]:
+            whatsapp_alert(alert_data)
     
     SLACK_WEBHOOK = os.environ.get('SLACK_WEBHOOK_URL')
     if SLACK_WEBHOOK and alert_data['should_alert']:

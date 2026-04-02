@@ -1,0 +1,34 @@
+artifact_path: mlflow-artifacts:/457951054943891391/models/m-514a3ee609734b0d8c8215ce448a3151/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.6
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.5.2
+is_signature_from_type_hint: false
+mlflow_version: 3.8.1
+model_id: m-514a3ee609734b0d8c8215ce448a3151
+model_size_bytes: 589216
+model_uuid: m-514a3ee609734b0d8c8215ce448a3151
+prompts: null
+run_id: 99975f02f99c424f8d9b136ee65479f3
+signature:
+  inputs: '[{"type": "long", "name": "age", "required": true}, {"type": "double",
+    "name": "gender", "required": false}, {"type": "double", "name": "pack_years",
+    "required": true}, {"type": "integer", "name": "radon_exposure", "required": true},
+    {"type": "double", "name": "asbestos_exposure", "required": false}, {"type": "double",
+    "name": "secondhand_smoke_exposure", "required": false}, {"type": "double", "name":
+    "copd_diagnosis", "required": false}, {"type": "integer", "name": "alcohol_consumption",
+    "required": true}, {"type": "double", "name": "family_history", "required": false}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-03-29 11:52:29.377016'

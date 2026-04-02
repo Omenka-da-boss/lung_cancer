@@ -47,23 +47,25 @@ try:
     client = MlflowClient()
 
     # Find your experiment
-    experiment_name = "LungCancerExperiment"
+    experiment_name = "Nested Runs"
     experiment = client.get_experiment_by_name(experiment_name)
     experiment_id = experiment.experiment_id
 
     # Get the latest run
-    runs = client.search_runs(experiment_id, order_by=["start_time DESC"], max_results=1)
+    runs = client.search_runs(experiment_id,filter_string="tags.mlflow.parentRunId != ''",order_by=["metrics.roc_auc DESC"], max_results=1)
     run_id = runs[0].info.run_id
 
-    # Load the model artifact
-    model_uri = f"runs:/{run_id}/model"
+    # # Load the model artifact
+    # model_uri = f"runs://{run_id}/model"
+    
+    model_uri = f'mlflow-artifacts:/5/{run_id}/artifacts/model.pkl'
     model = mlflow.sklearn.load_model(model_uri)
     print(f"✅ Model loaded successfully from {model_uri}")
 except Exception as e:
-    print(f"❌ Failed to load model from {model_uri}: {e}")
+    print(f"❌ Failed to load model from mlflow")
     # Fallback for local development (OPTIONAL)
     try:
-        model_path = './models/model.pkl'
+        model_path = 'models\\model.pkl'
         if model_path:
         #     latest_model = max(local_model_paths, key=os.path.getmtime)
         #     model = mlflow.pyfunc.load_model(latest_model)
@@ -149,6 +151,7 @@ def predict(input_dict: dict):
         
         if hasattr(preds,"tolist"):
             preds = preds.tolist()
+            return 
         
         if isinstance(preds, (list,tuple)) and len(preds) == 2:
             result = preds[0]
@@ -158,7 +161,7 @@ def predict(input_dict: dict):
         raise Exception(f"Model prediction failed: {e}")
     
     if result == 1:
-        return "Likely to have Lung Cancer"
+        return "Likely to have Lung Cancer",1
     else:
-        return "Unlikely to have Lung Cancer"
+        return "Unlikely to have Lung Cancer",0
     

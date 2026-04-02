@@ -1,0 +1,133 @@
+groups:
+  - name: ml_model_alerts
+    interval: 30s
+    rules:
+      # Alert when model is down/unreachable
+      - alert: ModelDown
+        expr: up{job="ml_model"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: ml_model
+        annotations:
+          summary: "ML Model is down"
+          description: "Model endpoint has been unreachable for more than 1 minute"
+      
+      # High error rate alert
+      - alert: HighErrorRate
+        expr: |
+          (sum(rate(http_errors_total[5m])) / sum(rate(http_requests_total[5m]))) * 100 > 5
+        for: 2m
+        labels:
+          severity: warning
+          service: ml_model
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value }}% (threshold: 5%)"
+      
+      # Critical error rate - page immediately
+      - alert: CriticalErrorRate
+        expr: |
+          (sum(rate(http_errors_total[2m])) / sum(rate(http_requests_total[2m]))) * 100 > 20
+        for: 30s
+        labels:
+          severity: critical
+          service: ml_model
+        annotations:
+          summary: "Critical error rate - service degrading"
+          description: "Error rate is {{ $value }}% (threshold: 20%)"
+      
+      # Latency SLO violation
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 1.0
+        for: 5m
+        labels:
+          severity: warning
+          service: ml_model
+        annotations:
+          summary: "High latency detected"
+          description: "P95 latency is {{ $value }}s (SLO: 1s)"
+      
+      # Model drift detection
+      - alert: ModelDriftDetected
+        expr: |
+          abs(
+            avg_over_time(model_prediction_value[5m]) - 
+            avg_over_time(model_prediction_value[1h] offset 1h)
+          ) / stddev_over_time(model_prediction_value[1h] offset 1h) > 2.0
+        for: 5m
+        labels:
+          severity: warning
+          service: ml_model
+          type: drift
+        annotations:
+          summary: "Model drift detected"
+          description: "Prediction distribution shifted by {{ $value }} standard deviations"
+      
+      # Model stuck/constant predictions
+      - alert: ModelStuck
+        expr: |
+          stddev_over_time(model_prediction_value[10m]) < 0.01
+        for: 10m
+        labels:
+          severity: critical
+          service: ml_model
+        annotations:
+          summary: "Model stuck - predictions not varying"
+          description: "Model predictions have near-zero variance for 10 minutes"
+      
+      # Low confidence predictions
+      - alert: LowConfidence
+        expr: |
+          avg_over_time(model_confidence{prediction_type="current"}[5m]) < 0.3
+        for: 5m
+        labels:
+          severity: warning
+          service: ml_model
+        annotations:
+          summary: "Low model confidence"
+          description: "Average confidence is {{ $value }} (threshold: 0.3)"
+      
+      # Business impact: High-value prediction drop
+      - alert: HighValuePredictionsDrop
+        expr: |
+          (
+            rate(model_high_value_predictions_total[5m]) /
+            rate(model_prediction_value_count[5m])
+          ) < 0.05
+        for: 10m
+        labels:
+          severity: warning
+          service: ml_model
+          type: business
+        annotations:
+          summary: "High-value predictions dropped significantly"
+          description: "Only {{ $value | humanizePercentage }} of predictions are high-value"
+      
+      # Feature drift detection
+      - alert: FeatureDriftDetected
+        expr: |
+          abs(
+            avg_over_time(model_input_value[5m]) - 
+            avg_over_time(model_input_value[1h] offset 1h)
+          ) / stddev_over_time(model_input_value[1h] offset 1h) > 2.5
+        for: 5m
+        labels:
+          severity: warning
+          service: ml_model
+          type: drift
+        annotations:
+          summary: "Input feature drift detected"
+          description: "Input distribution shifted by {{ $value }} standard deviations"
+      
+      # Rate limiting alert (if we implement rate limiting)
+      - alert: HighThroughput
+        expr: rate(http_requests_total[1m]) > 100
+        for: 2m
+        labels:
+          severity: warning
+          service: ml_model
+        annotations:
+          summary: "High request throughput"
+          description: "Receiving {{ $value }} req/s, may need to scale"

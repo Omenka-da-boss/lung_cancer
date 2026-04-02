@@ -17,11 +17,6 @@ def evaluate_model(model,x_test,y_test,threshold):
     clas = classification_report(y_test,pred)
     cons = confusion_matrix(y_test,pred)
     
-    mlflow.log_metric("Precision",pre)
-    mlflow.log_metric("Recall",recall)
-    mlflow.log_metric("F1 Score",f1)
-    mlflow.log_metric("Roc_Auc Score",roc_auc)
-    mlflow.log_metric("Accuracy Score",acc)
     
     print(f"\n Classification Report \n {clas} \n Confusion Matrix \n {cons}")
     print(f"\n Precision Score \n {pre} \n Recall Score \n {recall}")

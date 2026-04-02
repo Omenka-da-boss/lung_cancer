@@ -1,0 +1,26 @@
+name: Lung Cancer Prediction
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    setup:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Code checkout to machine
+              uses: actions/checkout@v3
+            - name: Setup Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: "3.12"
+            - name: Install dependency
+              run: pip install -r requirement.txt
+    
+    ci:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Run model building pipeline
+              run: python scripts\run_pipeline.py
+              
+

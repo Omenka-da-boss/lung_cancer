@@ -1,0 +1,9 @@
+age
+gender
+pack_years
+radon_exposure
+asbestos_exposure
+secondhand_smoke_exposure
+copd_diagnosis
+alcohol_consumption
+family_history
