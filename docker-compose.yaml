@@ -7,6 +7,8 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    env_file:
+      - .env
     volumes:
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml
       - ./prometheus_rules.yml:/etc/prometheus/prometheus_rules.yml
@@ -18,8 +20,6 @@ services:
       - '--web.enable-lifecycle'  # Allow reload without restart
     ports:
       - "9090:9090"
-    env_file:
-      - .env
     networks:
       - monitoring_network
     restart: unless-stopped
@@ -27,6 +27,8 @@ services:
   alertmanager:
     image: prom/alertmanager:latest
     container_name: alertmanager
+    env_file:
+      - .env
     volumes:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
       - alertmanager_data:/alertmanager
@@ -36,8 +38,6 @@ services:
       - '--config.expand-env'
     ports:
       - "9093:9093"
-    env_file:
-      - .env
     networks:
       - monitoring_network
     restart: unless-stopped
