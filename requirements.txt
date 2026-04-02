@@ -1,20 +1,42 @@
-catboost==1.2.8
-evidently==0.6.7
-fastapi==0.135.3
-great_expectations==0.18.15
-joblib==1.5.3
-mlflow==3.8.1
-mlflow_skinny==3.8.1
-mlflow_tracing==3.8.1
-numpy==2.1.0
-optuna==4.6.0
-pandas==3.0.2
-posthog==7.4.2
-prometheus_client==0.24.1
-pydantic==2.12.5
-python-dotenv==1.2.2
-Requests==2.33.1
-scikit_learn==1.8.0
-twilio==9.10.4
-uvicorn==0.42.0
-xgboost==3.2.0
+# catboost==1.2.8
+# evidently==0.6.7
+# fastapi==0.135.3
+# great_expectations==0.18.15
+# joblib==1.5.3
+# mlflow==3.8.1
+# mlflow_skinny==3.8.1
+# mlflow_tracing==3.8.1
+# numpy==1.22.0,<2.1
+# optuna==4.6.0
+# pandas==3.0.2
+# posthog==7.4.2
+# prometheus_client==0.24.1
+# pydantic==2.12.5
+# python-dotenv==1.2.2
+# Requests==2.33.1
+# scikit_learn==1.8.0
+# twilio==9.10.4
+# uvicorn==0.42.0
+# xgboost==3.2.0
+catboost
+evidently
+fastapi
+great_expectations
+joblib
+mlflow
+mlflow_skinny
+mlflow_tracing
+numpy
+optuna
+pandas
+posthog
+prometheus_client
+pydantic
+python-dotenv
+Requests
+scikit_learn
+twilio
+uvicorn
+xgboost
+
+
