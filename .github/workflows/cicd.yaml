@@ -21,6 +21,6 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Run model building pipeline
-              run: python scripts\run_pipeline.py
+              run: python scripts/run_pipeline.py
 
 
