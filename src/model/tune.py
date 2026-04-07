@@ -19,9 +19,14 @@ def hyper_tuning(x_train,y_train,x_test,y_test,threshold,y):
             "random_strength": trial.suggest_float("random_strength", 1e-2, 10.0),
             "bagging_temperature": trial.suggest_float("bagging_temperature", 0.0, 1.0),
             "auto_class_weights":'Balanced',
+            "loss_function": "Logloss",
+            "eval_metric": "F1",
             "verbose": False,
-            "allow_writing_files": False
+            "early_stopping_rounds": 150,       
+            "allow_writing_files": False,
+            "random_state": 42
     }
+    
     
 
         model = CatBoostClassifier(**param)
@@ -31,7 +36,7 @@ def hyper_tuning(x_train,y_train,x_test,y_test,threshold,y):
 
         
         proba = model.predict_proba(x_test)[:, 1]
-        preds = (proba >= 0.35).astype(int)
+        preds = (proba >= 0.30).astype(int)
         # preds = model.predict(x_test)
         acc = accuracy_score(y_test,preds) * 100
         acc = round(acc,2)
@@ -49,7 +54,7 @@ def hyper_tuning(x_train,y_train,x_test,y_test,threshold,y):
     
     params = study.best_params
     
-    model = XGBClassifier(**params)
+    model = CatBoostClassifier(**params)
     
     return model,study.best_params
 
