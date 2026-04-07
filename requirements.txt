@@ -21,7 +21,7 @@
 catboost
 evidently
 fastapi
-great_expectations
+great_expectations==0.17.21
 joblib
 mlflow
 mlflow_skinny
