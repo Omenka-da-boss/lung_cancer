@@ -33,7 +33,7 @@ jobs:
             - name: Build and push user interface
               working-directory: ./frontend
               run: |
-                docker build -t ${{vars.DOCKER_USERNAME}}/frontend
+                docker build -t ${{vars.DOCKER_USERNAME}}/frontend .
                 docker push ${{vars.DOCKER_USERNAME}}/frontend
 
             
