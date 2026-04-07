@@ -51,7 +51,8 @@ jobs:
               username: ${{secrets.EC2_USERNAME}}
               key: ${{secrets.EC2_PRIVATE_KEY}}
               script: |
-                sudo apt upgrade & sudo apt update
+                sudo apt upgrade & sudo apt update -y
+                sudo apt install docker-compose -y
                 sudo mkdir app
                 cd /home/ubuntu/app
                 sudo docker-compose pull
