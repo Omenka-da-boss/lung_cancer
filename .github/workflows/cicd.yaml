@@ -54,7 +54,8 @@ jobs:
                 sudo apt upgrade & sudo apt update -y
                 sudo apt install docker-compose -y
                 # sudo mkdir app
-                cd /home/ubuntu
+                sudo cp docker-compose.yml /home/ubuntu/app
+                cd /home/ubuntu/app
                 ls
                 sudo docker-compose pull
                 sudo docker-compose down
