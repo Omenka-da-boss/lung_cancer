@@ -2,7 +2,7 @@ import great_expectations as gx
 import pandas as pd
 
 # Load dataset
-df = pd.read_csv("mlops\\EDA\\lung_cancer_dataset.csv")
+# df = pd.read_csv("mlops\\EDA\\lung_cancer_dataset.csv")
 
 def validate_data(df):
     context = gx.get_context()
@@ -112,4 +112,3 @@ def validate_data(df):
         return results["success"], failed_expectations
     
     
-validate_data(df)
