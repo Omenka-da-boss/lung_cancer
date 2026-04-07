@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lung Cancer Prediction</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section class="header">
+        <div class="title">
+            <img src="img/lung_image.png" alt="lung image">
+            <h1>Lung Cancer Prediction</h1>
+        </div>
+        <div class="desc">
+            <h4>
+                Welcome to the Lung Cancer Prediction Tool, <br>
+                Enter the patients detailes to get a risk assessment
+            </h4>
+           <span>
+             <img src="img/lung.png" alt="Form of logo">
+            <img src="img/lung_image.png" alt="Form of logo">
+           </span>
+        </div>
+    </section>
+    <section class="body">
+        <form class="predict_value">
+            <span>
+                <label>Age</label><br>
+                <input type="number" id="age" placeholder="Age" required />
+            </span>
+            <span>
+                <label for="gender">Enter your Gender</label> <br>
+            <select name="gender" class="selct" id="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            </span>
+            <span>
+                <label>Pack Years</label> <br>
+                <input type="number" id="pack" placeholder="Pack_Years" required>
+
+            </span>
+            <span>
+                <label for="radon">Enter Radon Exposure Level</label> <br>
+            <select name="radon" class="selct" id="radon" required>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+            </span>
+            <span>
+            <label for="abs">Enter Asbestos Exposure</label> <br>
+            <select name="abs" class="selct" id="abs" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            </span>
+            <span>
+            <label for="smoke">Enter Secondhand Smoke Exposure</label> <br>
+            <select name="smoke" class="selct" id="smoke" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            </span>
+            <span>
+            <label for="copd">Enter Copd Diagnosis</label> <br>
+            <select name="copd" class="selct" id="copd" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            </span>
+            <span>
+            <label for="alcohol">Enter Alcohol Consumption Level</label><br>
+            <select name="alcohol" class="selct" id="alcohol" required>
+                <option value="heavy">Heavy</option>
+                <option value="moderate">Moderate</option>
+                <option value="unk">Unknown</option>
+            </select>
+            </span>
+             <span>
+            <label for="fam">Enter Family History</label><br>
+            <select name="fam" class="selct" id="family" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+             </span>
+             <button type="submit">Predict</button>
+        </form>
+    </section>
+    <section class="footer">
+        <div class="results">
+            <h2 class="section-title">Prediction Result: </h2> <br>
+            <h2 class="result"></h2>
+        </div>
+    </section>
+</body>
+</html>

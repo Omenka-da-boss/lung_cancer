@@ -16,7 +16,8 @@ from mlflow.tracking import MlflowClient
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
-from src.load.load import load_data
+# from src.load.load import load_data
+from load_data import load_data
 from src.load.preprocess import preprocess
 from src.feature.build_feat import build_feature
 from src.utils.validate import validate_data
@@ -46,7 +47,7 @@ def main(args):
             
             print(f"Loading Of Dataset!!")
             
-            df = load_data(args.input)
+            df = load_data()
             
             print(f"✅✅ Dataset Loaded Succcessfully!! with Row: {df.shape[0]} and Columns: {df.shape[1]}")
             
@@ -236,7 +237,7 @@ def main(args):
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description="Run churn pipeline with XGBoost + MLflow")
-    p.add_argument("--input", type=str, required=True,
+    p.add_argument("--input", type=str,
                    help="path to CSV (e.g., data/raw/Telco-Customer-Churn.csv)")
     p.add_argument("--target", type=str, default="lung_cancer")
     p.add_argument("--threshold", type=float, default=0.30)

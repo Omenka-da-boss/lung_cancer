@@ -9,7 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Code checkout to machine
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
             - name: Setup Python
               uses: actions/setup-python@v4
               with:
@@ -17,9 +17,63 @@ jobs:
             - name: Install dependency
               run: pip install -r requirements.txt
             - name: Start Up Mlflow Server
-              run: mlflow ui
+              run: mlflow server --host 0.0.0.0 --port 5000 &
             - name: Run model building pipeline
               run: python scripts/run_pipeline.py --input data/lung_cancer_dataset.csv --target lung_cancer
+            - name: Login to docker hub
+              uses: docker/login-action@v3
+              with:
+                username: ${{vars.DOCKER_USERNAME}}
+                password: ${{secrets.DOCKER_PASSSWORD}}
+            - name: Build and push api image to docker hub
+              working-directory: ./app
+              run: |
+                docker build -t ${{vars.DOCKER_USERNAME}}/model_api .
+                docker push ${{vars.DOCKER_USERNAME}}/model_api
+            - name: Build and push user interface
+              working-directory: .frontend
+              run: |
+                docker build -t ${{vars.DOCKER_USERNAME}}/frontend
+                docker push ${{vars.DOCKER_USERNAME}}/frontend
+
+            
+    cd:
+      needs: ci
+      runs-on: ubuntu-latest
+
+      steps:
+         - name: Check out the code
+           uses: actions/checkout@v4
+         - name: Deploy to our server
+           uses: appleboy/ssh-action@master
+           with:
+              host: ${{secrets.EC2_HOST_SERVER}}
+              username: ${{secrets.EC2_USERNAME}}
+              key: ${{secrets.EC2_PRIVATE_KEY}}
+              script: |
+                sudo apt upgrade & sudo apt update
+                sudo mkdir app
+                cd /home/ubuntu/app
+                sudo docker-compose pull
+                sudo docker-compose down
+                sudo docker-compose up -d
+    
+    monitoring:
+      needs: cd
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Check out Code to machine
+          uses: actions/checkout@v4
+        - name: Monitor Models health
+          run: python data_drift\drift.py
+
+      
+                
+            
+
+
+
 
             
 

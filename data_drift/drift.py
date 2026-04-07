@@ -43,17 +43,36 @@ multi_map = {
 num_cols = ["pack_years","age"]
 
 def load_artifacts(model_path):
-        with open(model_path,"rb") as f:
-            model = pickle.load(f)
-            if model:
-                print("Successfully Loaded")
+    # from mlflow.tracking import MlflowClient
+    # import mlflow.sklearn
+
+    # # Connect to MLflow tracking server
+    # mlflow.set_tracking_uri("http://localhost:5000")
+
+    # client = MlflowClient()
+
+    # # Find your experiment
+    # experiment_name = "Nested Runs"
+    # experiment = client.get_experiment_by_name(experiment_name)
+    # experiment_id = experiment.experiment_id
+
+    # # Get the latest run
+    # runs = client.search_runs(experiment_id,filter_string="tags.mlflow.parentRunId != ''",order_by=["metrics.roc_auc DESC"], max_results=1)
+    # run_id = runs[0].info.run_id
+
+    # # # Load the model artifact
+    # # model_uri = f"runs://{run_id}/model"
+    
+    # model_uri = f'mlflow-artifacts:/5/{run_id}/artifacts/model.pkl'
+    # model = mlflow.sklearn.load_model(model_uri)
+    model = joblib.load("models\\model.pkl")
             
-            with open("artifacts\\features_columns.json","rb") as f:
-                features = json.load(f)
-                features.append("lung_cancer")
+    with open("artifacts\\features_columns.json","rb") as f:
+        features = json.load(f)
+        features.append("lung_cancer")
                 # print(features)
         
-        return model,features
+    return model,features
     
 model,features = load_artifacts("models\\model.pkl")
         
@@ -83,6 +102,31 @@ def clean_input(df: pd.DataFrame) -> pd.DataFrame:
             df[bool_cols] = df[bool_cols].astype(int)
         
         return df
+
+def retraining_trigger():
+    import requests
+    
+    repo_name = os.getenv("GITHUB_REPO_NAME")
+    user_name = os.getenv("GITHUB_USER_NAME")
+    token = os.getenv("GITHUB_TOKEN")
+        
+    url = f"https://api.github.com/repos/{user_name}/{repo_name}/actions/workflows/retrain.yml/dispatches"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json"
+    }
+
+    data = {
+        "ref": "main"
+    }
+    
+    response = requests.post(url,headers,json=data)
+    
+    if response.status_code == "204":
+        print("✅ Retraining pipeline triggered!")
+    else:
+        print(f"Failed:",response.text)
+
 
 # Reference/Training Dataset
 ref_df = pd.read_csv("data\\lung_cancer_dataset.csv")
@@ -388,8 +432,8 @@ def automated_test(ref_df,current_df,column_maps,output_path):
     ref_X = clean_input(ref_df[features])
     current_X = clean_input(current_df[features])
     
-    current_X["prediction"] = model.predict(current_X[features])
-    ref_X["prediction"] = model.predict(ref_X[features])
+    current_X["prediction"] = model.predict(current_X.drop("lung_cancer",axis=1))
+    ref_X["prediction"] = model.predict(ref_X.drop("lung_cancer",axis=1))
     
     
     current_X.rename(columns={"lung_cancer":"actual"},inplace=True)
@@ -398,6 +442,8 @@ def automated_test(ref_df,current_df,column_maps,output_path):
     binary_suite = TestSuite(tests=[BinaryClassificationTestPreset()])
     
     binary_suite.run(reference_data=ref_X,current_data=current_X,column_mapping=ColumnMapping(target="actual",prediction="prediction"))
+    
+    binary_metrics = binary_suite.as_dict()
     
     target_col = "actual"
     
@@ -409,6 +455,8 @@ def automated_test(ref_df,current_df,column_maps,output_path):
     no_targets.run(reference_data=ref_no_actual,current_data=current_no_actual,column_mapping=ColumnMapping(target="actual",prediction="prediction"))
     
     no_targets.save_html(f"{output_path}\\binary.html")
+    
+    target_metrics = no_targets.as_dict()
     
     tests = metrics.get('tests', [])
 
@@ -438,7 +486,11 @@ def automated_test(ref_df,current_df,column_maps,output_path):
                 t for t in metrics.get('tests', []) if t.get('status') == 'FAIL']
                 for test in failed_tests:
                     f.write(f"  ❌ {test['name']}: {test.get('description', 'No description')}\n\n")
-    return metrics
+                # start retraining function
+                retraining_trigger()
+                    
+
+    return target_metrics,binary_metrics
             
 def classify_failure(test):
     name = test.get('name')
@@ -798,35 +850,36 @@ def run_alerts(suite_dict):
     
     
 
-# with open("monitoring\\drift_results.json", 'w') as f:
+with open("monitoring\\drift_results.json", 'w') as f:
 
-#         json_results = {
-#             'dataset_drift': bool(drift_results['dataset_drift']),
-#             'drift_score': float(drift_results['drift_share']),
-#             'number_of_drifted_columns': int(drift_results['number_of_drifted_columns']),
-#             'drifted_columns': [
-#                 {k: (float(v) if isinstance(v, (np.float32, np.float64)) else v) 
-#                 for k, v in col.items()}
-#                 for col in drift_results['drifted_cols']
-#             ]
-#         }
-#         json.dump(json_results, f, indent=2)
+        json_results = {
+            'dataset_drift': bool(drift_results['dataset_drift']),
+            'drift_score': float(drift_results['drift_share']),
+            'number_of_drifted_columns': int(drift_results['number_of_drifted_columns']),
+            'drifted_columns': [
+                {k: (float(v) if isinstance(v, (np.float32, np.float64)) else v) 
+                for k, v in col.items()}
+                for col in drift_results['drifted_cols']
+            ]
+        }
+        json.dump(json_results, f, indent=2)
        
-reports = automated_test(ref_df,current_df,column_maps,"monitoring")
+target,binary = automated_test(ref_df,current_df,column_maps,"monitoring")
 
-run_alerts(reports)
+
+# run_alerts(reports)
 
 print("\n✅ Drift detection complete. Results saved to JSON.")
                     
-# advanced_reports = advanced_drift_detection(ref_df,current_df,column_maps)
-# advanced_reports.save_html("monitoring\\advanced.html")          
+advanced_reports = advanced_drift_detection(ref_df,current_df,column_maps)
+advanced_reports.save_html("monitoring\\advanced.html")          
       
-# quality,quality_report = data_quality_monitoring(ref_df,current_df,column_maps)   
+quality,quality_report = data_quality_monitoring(ref_df,current_df,column_maps)   
 
-# with open("monitoring\\quality.json","w") as f:
-#     json.dump(quality_report,f,indent=3)       
+with open("monitoring\\quality.json","w") as f:
+    json.dump(quality_report,f,indent=3)       
 
-# model_report = model_performance(ref_df,current_df,column_maps)
+model_report = model_performance(ref_df,current_df,column_maps)
 
-# with open("monitoring\\model.json","w") as f:
-#     json.dump(model_report,f,indent=3)
+with open("monitoring\\model.json","w") as f:
+    json.dump(model_report,f,indent=3)

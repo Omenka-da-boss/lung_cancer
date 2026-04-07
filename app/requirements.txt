@@ -1,0 +1,11 @@
+auto_mix_prep
+fastapi
+joblib
+mlflow
+mlflow_skinny
+mlflow_tracing
+pandas
+prometheus_client
+pydantic
+scikit_learn
+uvicorn
