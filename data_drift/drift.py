@@ -65,7 +65,13 @@ def load_artifacts(model_path):
     
     # model_uri = f'mlflow-artifacts:/5/{run_id}/artifacts/model.pkl'
     # model = mlflow.sklearn.load_model(model_uri)
-    model = joblib.load("models\\model.pkl")
+    try:
+        model_uri = "models:/My_Model/Production"
+        model = mlflow.pyfunc.load_model(model_uri)
+        print(f"✅ Model loaded successfully from {model_uri}")
+    except Exception as e:
+        model = joblib.load("./models/model.pkl")
+        print(f"✅ Fallback: Loaded model from {model_path}")
             
     with open("artifacts\\features_columns.json","rb") as f:
         features = json.load(f)
