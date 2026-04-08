@@ -182,8 +182,20 @@ jobs:
 
       - name: Run Drift Detection
         run: python data_drift/drift.py
-        # env:
-        #   MODEL_ENDPOINT: ${{ secrets.MODEL_ENDPOINT }}       
+        env:
+          REPO_TOKEN : ${{secrets.REPO_TOKEN}}
+          SLACK_WEBHOOK_URL : ${{secrets.SLACK_WEBHOOK_URL}}
+          ALERT_EMAIL_SENDER : ${{secrets.ALERT_EMAIL_SENDER}}
+          ALERT_EMAIL_RECIPIENTS : ${{secrets.ALERT_EMAIL_RECIPIENTS}}
+          ALERT_EMAIL_PASSWORD : ${{secrets.ALERT_EMAIL_PASSWORD}}
+          TWILIO_ACCOUNT_SID : ${{secrets.TWILIO_ACCOUNT_SID}}
+          TWILIO_AUTH_TOKEN : ${{secrets.TWILIO_AUTH_TOKEN}} 
+          TWILIO_WHATSAPP : ${{secrets.TWILIO_WHATSAPP_FROM}}
+          WHATSAPP_TO : ${{secrets.WHATSAPP_TO}}
+          USER_NAME : ${{vars.USER_NAME}}  
+          REPO_NAME : ${{vars.REPO_NAME}}  
+          SMTP_SERVER : ${{vars.SMTP_SERVER}}
+          SMTP_PORT: ${{vars.SMTP_PORT}}
                 
             
 

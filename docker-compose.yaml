@@ -1,17 +1,15 @@
 services:
 
-  ml_model:
-    build: ./src/app
-    networks:
-      - monitoring_network
-    restart: unless-stopped
+  api:
+    image: ${DOCKER_USERNAME}/model_api:latest
+    ports:
+      - "8000:8000"
+    # env_file: .env  <-- Comment this out if you haven't uploaded a .env yet
+
   frontend:
-    build: ./frontend
-    networks:
-      - monitoring_network
-    depends_on:
-      - ml_model
-    restart: unless-stopped
+    image: ${DOCKER_USERNAME}/frontend:latest
+    ports:
+      - "8501:8501"
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus

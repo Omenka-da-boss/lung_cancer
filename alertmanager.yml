@@ -21,7 +21,7 @@ route:
 receivers:
   - name: 'slack-notifications'
     slack_configs:
-      - api_url: 'https://hooks.slack.com/services/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'  # Replace with your webhook
+      - api_url: 'https://hooks.slack.com/services/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'  
         channel: '#ml-alerts'
         title: 'ML Model Alert'
         text: |

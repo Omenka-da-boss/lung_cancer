@@ -112,9 +112,9 @@ def clean_input(df: pd.DataFrame) -> pd.DataFrame:
 def retraining_trigger():
     import requests
     
-    repo_name = os.getenv("GITHUB_REPO_NAME")
-    user_name = os.getenv("GITHUB_USER_NAME")
-    token = os.getenv("GITHUB_TOKEN")
+    repo_name = os.getenv("REPO_NAME") 
+    user_name = os.getenv("USER_NAME")
+    token = os.getenv("REPO_TOKEN")
         
     url = f"https://api.github.com/repos/{user_name}/{repo_name}/actions/workflows/retrain.yml/dispatches"
     headers = {
