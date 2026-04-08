@@ -120,7 +120,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }} # Fixed typo from PASSSWORD
+          password: ${{ secrets.DOCKER_PASSSWORD }} # Fixed typo from PASSSWORD
 
       - name: Build and Push API
         uses: docker/build-push-action@v5
@@ -182,8 +182,8 @@ jobs:
 
       - name: Run Drift Detection
         run: python data_drift/drift.py
-        env:
-          MODEL_ENDPOINT: ${{ secrets.MODEL_ENDPOINT }}       
+        # env:
+        #   MODEL_ENDPOINT: ${{ secrets.MODEL_ENDPOINT }}       
                 
             
 
