@@ -53,12 +53,18 @@ jobs:
               script: |
                 sudo apt upgrade & sudo apt update -y
                 sudo apt install docker-compose -y
-                cd home/ubuntu/app
-                sudo git clone https://github.com/Omenka-da-boss/lung_cancer.git
-                ls
+                PROJECT_DIR=/home/ubuntu/lung_cancer
+                if [ ! -d "$PROJECT_DIR" ]; then
+                  git clone https://github.com/Omenka-da-boss/lung_cancer.git "$PROJECT_DIR"
+                else
+                  cd "$PROJECT_DIR"
+                  git pull
+                fi
+                cd "$PROJECT_DIR"
                 sudo docker-compose pull
                 sudo docker-compose down
                 sudo docker-compose up -d
+               
                 
     
     monitoring:
