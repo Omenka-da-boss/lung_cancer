@@ -141,6 +141,18 @@ jobs:
     needs: ci
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4 # Gets the files onto the GitHub Runner
+
+      - name: Copy Config Files to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_SERVER }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+            # Copy your config files and docker-compose to the server
+          source: "docker-compose.yml,prometheus.yaml,alertmanager.yml,grafana/"
+          target: "/home/ubuntu/lung_cancer/"
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -156,7 +168,7 @@ jobs:
             # Create project directory if it doesn't exist
             mkdir -p ~/lung_cancer
             cd ~/lung_cancer
-            cat <<EOF > .env
+            sudo tee .env <<EOF > /dev/null
             DOCKER_USERNAME=${{ vars.DOCKER_USERNAME }}
             REPO_TOKEN=${{secrets.REPO_TOKEN}}
             SLACK_WEBHOOK_URL=${{secrets.SLACK_WEBHOOK_URL}}

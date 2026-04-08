@@ -14,6 +14,7 @@ import warnings
 import pickle
 import joblib
 import smtplib
+import mlflow 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
@@ -135,9 +136,9 @@ def retraining_trigger():
 
 
 # Reference/Training Dataset
-ref_df = pd.read_csv("data\\lung_cancer_dataset.csv")
+ref_df = pd.read_csv("./data/lung_cancer_dataset.csv")
 # Current/Production Data
-current_df = pd.read_csv("monitoring\\current_data.csv")
+current_df = pd.read_csv("./monitoring/current_data.csv")
 
 # Configuring Column Maps
 
