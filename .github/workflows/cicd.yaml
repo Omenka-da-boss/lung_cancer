@@ -1,89 +1,189 @@
-name: Lung Cancer Prediction
+# name: Lung Cancer Prediction
 
-on:
-    push:
-        branches: [main]
+# on:
+#     push:
+#         branches: [main]
 
-jobs:
-    ci:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Code checkout to machine
-              uses: actions/checkout@v4
-            - name: Setup Python
-              uses: actions/setup-python@v4
-              with:
-                python-version: "3.12"
-            - name: Install dependency
-              run: pip install -r requirements.txt
-            - name: Start Up Mlflow Server
-              run: mlflow server --host 0.0.0.0 --port 5000 &
-            - name: Run model building pipeline
-              run: python scripts/run_pipeline.py --input data/lung_cancer_dataset.csv --target lung_cancer
-            - name: Login to docker hub
-              uses: docker/login-action@v3
-              with:
-                username: ${{vars.DOCKER_USERNAME}}
-                password: ${{secrets.DOCKER_PASSSWORD}}
-            - name: Build and push api image to docker hub
-              working-directory: ./app
-              run: |
-                docker build -t ${{vars.DOCKER_USERNAME}}/model_api .
-                docker push ${{vars.DOCKER_USERNAME}}/model_api
-            - name: Build and push user interface
-              working-directory: ./frontend
-              run: |
-                docker build -t ${{vars.DOCKER_USERNAME}}/frontend .
-                docker push ${{vars.DOCKER_USERNAME}}/frontend
+# jobs:
+#     ci:
+#         runs-on: ubuntu-latest
+#         steps:
+#             - name: Code checkout to machine
+#               uses: actions/checkout@v4
+#             - name: Setup Python
+#               uses: actions/setup-python@v4
+#               with:
+#                 python-version: "3.12"
+#             - name: Install dependency
+#               run: pip install -r requirements.txt
+#             - name: Start Up Mlflow Server
+#               run: mlflow server --host 0.0.0.0 --port 5000 &
+#             - name: Run model building pipeline
+#               run: python scripts/run_pipeline.py --input data/lung_cancer_dataset.csv --target lung_cancer
+#             - name: Login to docker hub
+#               uses: docker/login-action@v3
+#               with:
+#                 username: ${{vars.DOCKER_USERNAME}}
+#                 password: ${{secrets.DOCKER_PASSSWORD}}
+#             - name: Build and push api image to docker hub
+#               working-directory: ./app
+#               run: |
+#                 docker build -t ${{vars.DOCKER_USERNAME}}/model_api .
+#                 docker push ${{vars.DOCKER_USERNAME}}/model_api
+#             - name: Build and push user interface
+#               working-directory: ./frontend
+#               run: |
+#                 docker build -t ${{vars.DOCKER_USERNAME}}/frontend .
+#                 docker push ${{vars.DOCKER_USERNAME}}/frontend
 
             
-    cd:
-      needs: ci
-      runs-on: ubuntu-latest
+#     cd:
+#       needs: ci
+#       runs-on: ubuntu-latest
 
-      steps:
-         - name: Check out Code to machine
-           uses: actions/checkout@v4
-         - name: Deploy to our server
-           uses: appleboy/ssh-action@master
-           with:
-              host: ${{secrets.EC2_HOST_SERVER}}
-              username: ${{secrets.EC2_USERNAME}}
-              key: ${{secrets.EC2_PRIVATE_KEY}}
-              script: |
-                sudo apt upgrade & sudo apt update -y
-                sudo apt install docker-compose -y
-                PROJECT_DIR=/home/ubuntu/lung_cancer
-                if [ ! -d "$PROJECT_DIR" ]; then
-                  git clone https://github.com/Omenka-da-boss/lung_cancer.git "$PROJECT_DIR"
-                else
-                  cd "$PROJECT_DIR"
-                  git pull
-                fi
-                cd "$PROJECT_DIR"
-                sudo docker-compose pull
-                sudo docker-compose down
-                sudo docker-compose up -d
+#       steps:
+#          - name: Check out Code to machine
+#            uses: actions/checkout@v4
+#          - name: Deploy to our server
+#            uses: appleboy/ssh-action@master
+#            with:
+#               host: ${{secrets.EC2_HOST_SERVER}}
+#               username: ${{secrets.EC2_USERNAME}}
+#               key: ${{secrets.EC2_PRIVATE_KEY}}
+#               script: |
+#                 sudo apt upgrade & sudo apt update -y
+#                 sudo apt install docker-compose -y
+#                 PROJECT_DIR=/home/ubuntu/lung_cancer
+#                 if [ ! -d "$PROJECT_DIR" ]; then
+#                   git clone https://github.com/Omenka-da-boss/lung_cancer.git "$PROJECT_DIR"
+#                   git config --global --add safe.directory /home/ubuntu/lung_cancer
+#                 else
+#                   cd "$PROJECT_DIR"
+#                   git pull
+#                 fi
+#                 cd "$PROJECT_DIR"
+#                 sudo docker-compose pull
+#                 sudo docker-compose down
+#                 sudo docker-compose up -d
                
                 
     
-    monitoring:
-      needs: cd
-      runs-on: ubuntu-latest
+#     monitoring:
+#       needs: cd
+#       runs-on: ubuntu-latest
 
-      steps:
-        - name: Check out Code to machine
-          uses: actions/checkout@v4
-        - name: Setup Python
-          uses: actions/setup-python@v4
-          with:
-            python-version: "3.12"
-        - name: Install dependency
-          run: pip install -r requirements.txt
-        - name: Monitor Models health
-          run: python data_drift/drift.py
+#       steps:
+#         - name: Check out Code to machine
+#           uses: actions/checkout@v4
+#         - name: Setup Python
+#           uses: actions/setup-python@v4
+#           with:
+#             python-version: "3.12"
+#         - name: Install dependency
+#           run: pip install -r requirements.txt
+#         - name: Monitor Models health
+#           run: python data_drift/drift.py
 
-      
+name: Lung Cancer Prediction Pipeline
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Allows manual triggers
+
+jobs:
+  ci:
+    name: Continuous Integration & Image Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5 # Upgraded to v5
+        with:
+          python-version: "3.12"
+          cache: 'pip' # Speeds up subsequent runs
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Start MLflow & Train Model
+        run: |
+          mlflow server --host 0.0.0.0 --port 5000 &
+          sleep 5 # Give MLflow time to boot
+          python scripts/run_pipeline.py --input data/lung_cancer_dataset.csv --target lung_cancer
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }} # Fixed typo from PASSSWORD
+
+      - name: Build and Push API
+        uses: docker/build-push-action@v5
+        with:
+          context: ./app
+          push: true
+          tags: ${{ vars.DOCKER_USERNAME }}/model_api:latest
+
+      - name: Build and Push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ vars.DOCKER_USERNAME }}/frontend:latest
+
+  cd:
+    name: Continuous Deployment
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_SERVER }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            # Ensure Docker Compose is available without reinstalling every time
+            if ! command -v docker-compose &> /dev/null; then
+              sudo apt update && sudo apt install docker-compose -y
+            fi
+
+            # Create project directory if it doesn't exist
+            mkdir -p ~/lung_cancer
+            cd ~/lung_cancer
+
+            # Instead of git clone, we create a minimal docker-compose file 
+            # or rely on the one already there. 
+            # This pull command ensures we get the latest images we just built.
+            sudo docker-compose pull
+            sudo docker-compose up -d --remove-orphans
+            sudo docker image prune -f 
+
+  monitoring:
+    name: Model Monitoring
+    needs: cd
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Drift Detection
+        run: python data_drift/drift.py
+        env:
+          MODEL_ENDPOINT: ${{ secrets.MODEL_ENDPOINT }}       
                 
             
 
