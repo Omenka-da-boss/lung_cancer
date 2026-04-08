@@ -54,7 +54,11 @@ jobs:
                 sudo apt upgrade & sudo apt update -y
                 sudo apt install docker-compose -y
                 cd app
+                git clone https://github.com/Omenka-da-boss/lung_cancer.git
                 ls
+                sudo docker-compose pull
+                sudo docker-compose down
+                sudo docker-compose up -d
                 
     
     monitoring:
