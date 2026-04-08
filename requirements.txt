@@ -19,7 +19,7 @@
 # uvicorn==0.42.0
 # xgboost==3.2.0
 catboost
-evidently
+evidently==0.6.7
 fastapi
 great_expectations==0.17.21
 joblib
