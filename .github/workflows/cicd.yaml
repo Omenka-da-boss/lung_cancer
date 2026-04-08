@@ -34,7 +34,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}   # Fixed typo
+          password: ${{ secrets.DOCKER_PASSSWORD }}   # Fixed typo
 
       - name: Build and Push API Image
         uses: docker/build-push-action@v5
