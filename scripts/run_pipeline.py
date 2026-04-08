@@ -31,7 +31,7 @@ def main(args):
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     
     mlpaths = args.mlflow_uri or f"file:\\{project_root}\\mlruns"
-    ml_uri = "http://16.171.224.225:5000"
+    ml_uri = "http://localhost:5000"
     
     mlflow.set_tracking_uri(ml_uri)
     mlflow.set_experiment(args.experiment)
