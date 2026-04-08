@@ -51,6 +51,7 @@ jobs:
               script: |
                 sudo apt upgrade & sudo apt update -y
                 sudo apt install docker-compose -y
+                ls
               
     
     monitoring:
@@ -61,7 +62,7 @@ jobs:
         - name: Check out Code to machine
           uses: actions/checkout@v4
         - name: Monitor Models health
-          run: python data_drift\drift.py
+          run: python data_drift/drift.py
 
       
                 
