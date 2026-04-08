@@ -69,7 +69,7 @@ jobs:
           with:
             python-version: "3.12"
         - name: Install dependency
-          run: pip install -r data_drift/requirements.txt
+          run: pip install -r requirements.txt
         - name: Monitor Models health
           run: python data_drift/drift.py
 

@@ -1,7 +1,0 @@
-evidently==0.6.7
-joblib==1.5.3
-numpy==2.4.4
-pandas==3.0.2
-python-dotenv==1.2.2
-Requests==2.33.1
-twilio==9.10.4
