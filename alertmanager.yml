@@ -33,7 +33,7 @@ receivers:
         actions:
           - type: button
             text: 'View Dashboard'
-            url: 'http://localhost:3000/d/ml-monitoring'
+            url: 'http://16.171.224.225:3000/d/ml-monitoring'
 
 
   - name: 'email-notifications'

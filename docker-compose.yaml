@@ -1,6 +1,6 @@
 services:
 
-  api:
+  ml_model:
     image: ${DOCKER_USERNAME}/model_api:latest
     ports:
       - "8000:8000"

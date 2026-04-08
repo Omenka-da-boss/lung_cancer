@@ -12,7 +12,7 @@ def hyper_tuning(x_train,y_train,x_test,y_test,threshold,y):
     
     def objective(trial):
         param = {
-            "iterations": trial.suggest_int("iterations", 100, 1500),
+            "iterations": trial.suggest_int("iterations", 500, 2000),
             "learning_rate": trial.suggest_float("learning_rate", 1e-3, 0.3, log=True),
             "depth": trial.suggest_int("depth", 4, 10),
             "l2_leaf_reg": trial.suggest_float("l2_leaf_reg", 1e-2, 20.0),
@@ -41,7 +41,7 @@ def hyper_tuning(x_train,y_train,x_test,y_test,threshold,y):
         acc = accuracy_score(y_test,preds) * 100
         acc = round(acc,2)
         
-        if acc >= 70:
+        if acc >= 71:
             print("Accuracy Score:",acc)
             # return recall_score(y_test, preds)
             return recall_score(y_test,preds)

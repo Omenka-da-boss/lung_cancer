@@ -26,7 +26,7 @@ jobs:
 
       - name: Start MLflow & Train Model
         run: |
-          mlflow server --host 0.0.0.0 --port 5000 &
+          mlflow server --host 16.171.224.225 --port 5000 &
           sleep 5
           python scripts/run_pipeline.py --input data/lung_cancer_dataset.csv --target lung_cancer
 

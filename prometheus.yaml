@@ -7,7 +7,7 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-          - 'alertmanager:9093'  # Point to Alertmanager service
+          - '16.171.224.225:9093'  # Point to Alertmanager service
 
 # Rule files
 rule_files:
@@ -18,11 +18,11 @@ rule_files:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ['16.171.224.225:9090']
   
   - job_name: 'ml_model'
     static_configs:
-      - targets: ['localhost:8000']
+      - targets: ['16.171.224.225:8000']
     metrics_path: '/metrics'
     scrape_interval: 10s
     
