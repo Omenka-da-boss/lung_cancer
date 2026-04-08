@@ -73,7 +73,7 @@ def load_artifacts(model_path):
         model = joblib.load("./models/model.pkl")
         print(f"✅ Fallback: Loaded model from {model_path}")
             
-    with open("artifacts\\features_columns.json","rb") as f:
+    with open("./artifacts/features_columns.json","rb") as f:
         features = json.load(f)
         features.append("lung_cancer")
                 # print(features)
