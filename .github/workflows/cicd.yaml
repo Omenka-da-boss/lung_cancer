@@ -51,8 +51,7 @@ jobs:
               script: |
                 sudo apt upgrade & sudo apt update -y
                 sudo apt install docker-compose -y
-                # sudo mkdir app
-                sudo $GITHUB_WORKSPACE/docker-compose.yaml /home/ubuntu/app
+                # sudo $GITHUB_WORKSPACE/docker-compose.yaml /home/ubuntu/app
                 cd /home/ubuntu/app
                 ls
                 sudo docker-compose pull
