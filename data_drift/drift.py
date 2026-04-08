@@ -352,8 +352,8 @@ def model_performance(ref_df,current_df,column_maps):
     ref_X = clean_input(ref_df[features])
     current_X = clean_input(current_df[features])
     
-    current_X["prediction"] = model.predict(current_X[features])
-    ref_X["prediction"] = model.predict(ref_X[features])
+    current_X["prediction"] = model.predict(current_X.drop(["lung_cancer"],axis=1))
+    ref_X["prediction"] = model.predict(ref_X.drop(["lung_cancer"],axis=1))
     
     
     current_X.rename(columns={"lung_cancer":"actual"},inplace=True)
