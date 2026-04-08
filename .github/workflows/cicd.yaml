@@ -42,7 +42,8 @@ jobs:
       runs-on: ubuntu-latest
 
       steps:
-        
+         - name: Check out Code to machine
+           uses: actions/checkout@v4
          - name: Deploy to our server
            uses: appleboy/ssh-action@master
            with:
@@ -52,6 +53,8 @@ jobs:
               script: |
                 sudo apt upgrade & sudo apt update -y
                 sudo apt install docker-compose -y
+                cd app
+                ls
                 
     
     monitoring:
