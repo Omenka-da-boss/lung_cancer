@@ -1,0 +1,7 @@
+evidently
+joblib
+numpy
+pandas
+python-dotenv
+Requests
+twilio
