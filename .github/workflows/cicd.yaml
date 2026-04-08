@@ -34,7 +34,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSSWORD }}   # Fixed typo
+          password: ${{ secrets.DOCKER_PASSSWORD }}
 
       - name: Build and Push API Image
         uses: docker/build-push-action@v5
@@ -58,7 +58,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # ---------- NEW: Clean remote folder BEFORE copying ----------
+      # Step 1: Clean only the config files that cause tar conflicts
       - name: Remove existing config files on EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -66,14 +66,19 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            # Delete old configs to avoid "file exists" errors during tar extraction
-            rm -f /home/ubuntu/lung_cancer/prometheus.yaml
-            rm -f /home/ubuntu/lung_cancer/alertmanager.yml
-            rm -rf /home/ubuntu/lung_cancer/grafana
-            # Ensure parent folder exists
+            # Ensure target directory exists
             mkdir -p /home/ubuntu/lung_cancer
+            
+            # Remove specific files/directories that conflict during tar extraction
+            sudo rm -f /home/ubuntu/lung_cancer/prometheus.yaml
+            sudo rm -f /home/ubuntu/lung_cancer/alertmanager.yml
+            sudo rm -rf /home/ubuntu/lung_cancer/grafana
+            
+            # Fix ownership of the lung_cancer folder (optional, prevents future permission issues)
+            sudo chown -R $USER:$USER /home/ubuntu/lung_cancer
 
-      - name: Copy Config Files to EC2 (with overwrite)
+      # Step 2: Copy config files (without rm:true – we already cleaned manually)
+      - name: Copy Config Files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST_SERVER }}
@@ -81,9 +86,10 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: "docker-compose.yml,prometheus.yaml,alertmanager.yml,grafana/"
           target: "/home/ubuntu/lung_cancer/"
-          overwrite: true      # Force overwrite existing files
-          rm: true             # Remove target folder contents before copy (clean slate)
+          overwrite: true        # Overwrite existing files if they appear again
+          # rm: true is REMOVED – it was causing the error
 
+      # Step 3: Deploy with docker-compose
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -93,7 +99,7 @@ jobs:
           script: |
             cd /home/ubuntu/lung_cancer
 
-            # Write environment variables from GitHub secrets/vars
+            # Create .env file with all secrets
             sudo tee .env <<EOF > /dev/null
             DOCKER_USERNAME=${{ vars.DOCKER_USERNAME }}
             REPO_TOKEN=${{ secrets.REPO_TOKEN }}
