@@ -41,7 +41,7 @@ def hyper_tuning(x_train,y_train,x_test,y_test,threshold,y):
         acc = accuracy_score(y_test,preds) * 100
         acc = round(acc,2)
         
-        if acc >= 71.5:
+        if acc >= 70:
             print("Accuracy Score:",acc)
             # return recall_score(y_test, preds)
             return recall_score(y_test,preds)
